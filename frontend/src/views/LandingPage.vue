@@ -7,7 +7,10 @@
         </div>
       </div>
       <div class="right">
-        <h1>Empowering Early Detection<br />Through AI Assistance</h1>
+        <h1>
+          Empowering Early Detection<br />
+          Through AI Assistance
+        </h1>
         <p>
           This system assists dermatologists and users by classifying skin lesion
           images using AI and basic clinical details.
@@ -20,44 +23,62 @@
 
 <style scoped>
 .landing {
+  min-height: calc(100vh - 70px); /* minus navbar height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-card {
+  width: 100%;
+  max-width: 1000px;
+  background-color: #e3edf8;
+  border-radius: 18px;
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.left {
+  flex: 1;
   display: flex;
   justify-content: center;
 }
-.hero-card {
-  width: 100%;
-  max-width: 960px;
-  background-color: #e3edf8;
-  border-radius: 16px;
-  padding: 32px 40px;
-  display: flex;
-  gap: 32px;
-}
-.left,
+
 .right {
-  flex: 1;
+  flex: 1.3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
+
 .illustration {
-  width: 220px;
-  height: 220px;
+  width: 230px;
+  height: 230px;
   background-color: #ffffff;
-  border-radius: 18px;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 64px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
+
 .right h1 {
   font-size: 28px;
   color: #234a7c;
   margin-bottom: 12px;
+  line-height: 1.25;
 }
+
 .right p {
   color: #4b5c73;
   font-size: 14px;
   max-width: 420px;
   margin-bottom: 20px;
 }
+
 .cta {
   padding: 10px 24px;
   border-radius: 6px;
@@ -66,5 +87,23 @@
   color: #ffffff;
   font-size: 14px;
   cursor: pointer;
+}
+
+.cta:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .landing {
+    padding-top: 16px;
+  }
+  .hero-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+  .right p {
+    margin: 0 auto 20px;
+  }
 }
 </style>
