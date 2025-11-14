@@ -128,8 +128,7 @@ const gradcamSrc = computed(() =>
   border-radius: 6px;
   border: none;
   background: #234a7c;
-  color: #fff;
-  cursor: pointer;
+   cursor: pointer;
 }
 @media (max-width: 900px) {
   .content {
