@@ -3,27 +3,29 @@
     <h2>About DermaSense</h2>
 
     <p>
-      DermaSense is a research prototype that supports early assessment of suspicious
-      skin lesions. It analyzes images and optional metadata (age, sex, lesion site)
-      to provide a predicted class and confidence score.
+      DermaSense is a prototype decision-support tool for the early assessment of
+      suspicious skin lesions. It analyzes uploaded lesion images together with
+      optional clinical details such as age, sex, and lesion site.
     </p>
 
     <p>
-      The system focuses on three classes: Benign, Basal Cell Carcinoma (BCC), and
-      Squamous Cell Carcinoma (SCC).
+      The system focuses on three target classes: <strong>Benign</strong>,
+      <strong>Basal Cell Carcinoma (BCC)</strong>, and
+      <strong>Squamous Cell Carcinoma (SCC)</strong>. The goal is to assist
+      clinicians and learners, not to replace clinical judgment.
     </p>
 
-    <h3>How to use</h3>
+    <h3>How it works</h3>
     <ul>
-      <li>Go to <strong>Upload Image</strong> and choose a lesion image.</li>
-      <li>Optionally enter age, sex, and lesion site.</li>
-      <li>Wait for the system to analyze the image.</li>
-      <li>View the result and explanation on the Results page.</li>
+      <li>Upload a dermoscopic or clinical image of a skin lesion.</li>
+      <li>Optionally provide age, sex, and lesion site for additional context.</li>
+      <li>View the predicted class, confidence level, and explanation image.</li>
     </ul>
 
     <p class="disclaimer">
-      Disclaimer: This tool is for research and educational purposes only and is not a
-      substitute for professional medical diagnosis.
+      <strong>Disclaimer:</strong> DermaSense is a research prototype and not a
+      diagnostic tool. All outputs must be confirmed by a board-certified
+      dermatologist.
     </p>
   </section>
 </template>

@@ -12,13 +12,13 @@
             hidden
             @change="onFileChange"
           />
-          <p v-if="!previewUrl">Click to upload a skin lesion image</p>
+          <p v-if="!previewUrl">Upload skin lesion image here</p>
           <img v-else :src="previewUrl" alt="Preview" />
         </div>
       </div>
 
       <div class="right">
-        <h3>Optional Details</h3>
+        <h3>Optional</h3>
         <div class="grid">
           <div class="field">
             <label>Age</label>
@@ -82,6 +82,7 @@ const submit = async () => {
   if (!file.value) return;
   error.value = "";
 
+  // go to analyzing page immediately
   router.push("/analyzing");
 
   try {
@@ -93,10 +94,7 @@ const submit = async () => {
 
     const { data } = await api.post("/analyze", form);
     localStorage.setItem("analysisResult", JSON.stringify(data));
-
-    setTimeout(() => {
-      router.push("/results");
-    }, 1500);
+    router.push("/results");
   } catch (err) {
     console.error(err);
     localStorage.removeItem("analysisResult");
@@ -140,8 +138,8 @@ h2 {
   font-size: 13px;
 }
 .dropzone img {
-  max-width: 260px;
-  max-height: 260px;
+  max-width: 240px;
+  max-height: 240px;
   object-fit: cover;
 }
 h3 {
@@ -187,5 +185,13 @@ h3 {
   margin-top: 8px;
   color: #c53030;
   font-size: 13px;
+}
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

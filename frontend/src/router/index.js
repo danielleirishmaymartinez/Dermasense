@@ -11,12 +11,12 @@ const routes = [
   { path: "/about", name: "About", component: AboutPage },
   { path: "/upload", name: "Upload", component: UploadPage },
   { path: "/analyzing", name: "Analyzing", component: AnalyzingPage },
-  { path: "/results", name: "Results", component: ResultPage }
+  { path: "/results", name: "Results", component: ResultPage },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
 
 export default router;

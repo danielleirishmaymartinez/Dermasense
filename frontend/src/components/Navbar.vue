@@ -5,9 +5,15 @@
         DermaSense
       </div>
       <nav>
-        <router-link to="/about" class="link" active-class="active">About</router-link>
-        <router-link to="/upload" class="link" active-class="active">Upload Image</router-link>
-        <router-link to="/results" class="link" active-class="active">Results</router-link>
+        <router-link to="/about" class="link" active-class="active">
+          About
+        </router-link>
+        <router-link to="/upload" class="link" active-class="active">
+          Upload Image
+        </router-link>
+        <router-link to="/results" class="link" active-class="active">
+          Results
+        </router-link>
       </nav>
     </div>
   </header>
@@ -19,9 +25,9 @@
   border-bottom: 1px solid #c7d5eb;
 }
 .nav-inner {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 14px 24px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -34,7 +40,7 @@
 }
 nav {
   display: flex;
-  gap: 24px;
+  gap: 20px;
 }
 .link {
   text-decoration: none;
@@ -44,5 +50,12 @@ nav {
 .link.active {
   font-weight: 600;
   border-bottom: 2px solid #234a7c;
+}
+@media (max-width: 768px) {
+  .nav-inner {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
 }
 </style>

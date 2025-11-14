@@ -3,19 +3,19 @@
     <div class="hero-card">
       <div class="left">
         <div class="illustration">
+          <!-- Replace this with real illustration later -->
           👩‍⚕️
         </div>
       </div>
       <div class="right">
-        <h1>
-          Empowering Early Detection<br />
-          Through AI Assistance
-        </h1>
+        <h1>Empowering Early Detection<br />Through AI Assistance</h1>
         <p>
-          This system assists dermatologists and users by classifying skin lesion
-          images using AI and basic clinical details.
+          DermaSense assists dermatologists and users by classifying skin lesion
+          images using AI and metadata, helping support early detection decisions.
         </p>
-        <button class="cta" @click="$router.push('/upload')">Try it now</button>
+        <button class="cta" @click="$router.push('/upload')">
+          Try it now
+        </button>
       </div>
     </div>
   </section>
@@ -23,41 +23,33 @@
 
 <style scoped>
 .landing {
-  min-height: calc(100vh - 70px); /* minus navbar height */
   display: flex;
-  align-items: center;
   justify-content: center;
+  padding-top: 10px;
 }
 
 .hero-card {
   width: 100%;
-  max-width: 1000px;
+  max-width: 960px;
   background-color: #e3edf8;
-  border-radius: 18px;
+  border-radius: 16px;
   padding: 32px 40px;
   display: flex;
-  align-items: center;
   gap: 32px;
 }
 
 .left {
   flex: 1;
   display: flex;
-  justify-content: center;
-}
-
-.right {
-  flex: 1.3;
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
 
 .illustration {
-  width: 230px;
-  height: 230px;
+  width: 220px;
+  height: 220px;
   background-color: #ffffff;
-  border-radius: 20px;
+  border-radius: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,11 +57,17 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
+.right {
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .right h1 {
   font-size: 28px;
   color: #234a7c;
   margin-bottom: 12px;
-  line-height: 1.25;
 }
 
 .right p {
@@ -89,14 +87,7 @@
   cursor: pointer;
 }
 
-.cta:hover {
-  opacity: 0.9;
-}
-
-@media (max-width: 900px) {
-  .landing {
-    padding-top: 16px;
-  }
+@media (max-width: 768px) {
   .hero-card {
     flex-direction: column;
     text-align: center;
