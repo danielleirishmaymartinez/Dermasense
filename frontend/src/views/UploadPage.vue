@@ -12,13 +12,13 @@
             hidden
             @change="onFileChange"
           />
-          <p v-if="!previewUrl">Upload skin lesion image here</p>
+          <p v-if="!previewUrl">Click to upload a skin lesion image</p>
           <img v-else :src="previewUrl" alt="Preview" />
         </div>
       </div>
 
       <div class="right">
-        <h3>Optional</h3>
+        <h3>Optional Clinical Details</h3>
         <div class="grid">
           <div class="field">
             <label>Age</label>
@@ -82,7 +82,6 @@ const submit = async () => {
   if (!file.value) return;
   error.value = "";
 
-  // go to analyzing page immediately
   router.push("/analyzing");
 
   try {
@@ -106,90 +105,108 @@ const submit = async () => {
 
 <style scoped>
 .upload-card {
-  background-color: #e3edf8;
-  border-radius: 16px;
-  padding: 24px 28px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 32px 36px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
 }
+
 h2 {
-  color: #234a7c;
-  margin-bottom: 18px;
+  font-size: 28px;
+  color: #262626;
+  margin-bottom: 20px;
 }
+
 .layout {
   display: flex;
-  gap: 26px;
+  gap: 32px;
   align-items: flex-start;
 }
-.left {
-  flex: 1;
-}
+
+.left,
 .right {
   flex: 1;
 }
+
 .dropzone {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 26px;
+  background-color: #fdf7f1;
+  border-radius: 16px;
+  padding: 32px;
   text-align: center;
-  border: 1px dashed #b3c6e2;
+  border: 2px dashed #d0b39a;
   cursor: pointer;
 }
+
 .dropzone p {
-  color: #7c8ca3;
-  font-size: 13px;
+  color: #7a644f;
+  font-size: 15px;
 }
+
 .dropzone img {
-  max-width: 240px;
-  max-height: 240px;
+  max-width: 260px;
+  max-height: 260px;
   object-fit: cover;
+  border-radius: 14px;
 }
+
 h3 {
-  font-size: 14px;
-  color: #6a7c96;
-  margin-bottom: 10px;
+  font-size: 18px;
+  color: #3f3f3f;
+  margin-bottom: 14px;
 }
+
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 16px;
+  margin-bottom: 18px;
 }
+
 .field label {
-  font-size: 12px;
-  color: #6a7c96;
+  font-size: 13px;
+  color: #5f5f5f;
   margin-bottom: 4px;
   display: block;
 }
+
 .field input,
 .field select {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #c4d4ea;
-  font-size: 13px;
-}
-.analyze {
-  margin-top: 6px;
-  padding: 10px 18px;
-  border: none;
+  padding: 9px 10px;
   border-radius: 8px;
-  background-color: #234a7c;
-  color: #ffffff;
+  border: 1px solid #d7c3b2;
   font-size: 14px;
+  background-color: #fff;
+}
+
+.analyze {
+  margin-top: 10px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 999px;
+  background-color: #2f3a4c;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
 }
+
 .analyze:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
+
 .error {
-  margin-top: 8px;
+  margin-top: 10px;
   color: #c53030;
   font-size: 13px;
 }
+
 @media (max-width: 900px) {
   .layout {
     flex-direction: column;
   }
+
   .grid {
     grid-template-columns: 1fr;
   }

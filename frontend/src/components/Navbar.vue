@@ -21,41 +21,65 @@
 
 <style scoped>
 .nav-wrapper {
-  background-color: #e3edf8;
-  border-bottom: 1px solid #c7d5eb;
+  background-color: #f5e8dd; /* nude */
+  border-bottom: 1px solid #e1cdbd;
 }
+
 .nav-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 14px 20px;
+  padding: 18px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .brand {
-  font-weight: 700;
-  font-size: 22px;
-  color: #234a7c;
+  font-weight: 800;
+  font-size: 40px; /* bigger logo text */
+  letter-spacing: 0.04em;
+  color: #2b2b2b;
   cursor: pointer;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
+
 nav {
   display: flex;
-  gap: 20px;
+  gap: 30px;
 }
+
 .link {
   text-decoration: none;
-  color: #234a7c;
-  font-size: 14px;
-}
-.link.active {
+  color: #3b3b3b;
+  font-size: 18px; /* bigger nav text */
   font-weight: 600;
-  border-bottom: 2px solid #234a7c;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
+
+.link.active {
+  border-bottom: 2px solid #c48b62;
+  padding-bottom: 3px;
+}
+
+.link:hover {
+  color: #c0794f;
+}
+
 @media (max-width: 768px) {
   .nav-inner {
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     align-items: flex-start;
+  }
+
+  .brand {
+    font-size: 32px;
+  }
+
+  nav {
+    gap: 18px;
   }
 }
 </style>

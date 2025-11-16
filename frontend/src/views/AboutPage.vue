@@ -1,62 +1,133 @@
 <template>
-  <section class="about">
-    <h2>About DermaSense</h2>
+  <section class="about-section">
+    <div class="about-card">
+      
+      <!-- LEFT SIDE — IMAGE -->
+      <div class="about-image-wrapper">
+        <img src="@/assets/About.jpg" class="about-image" alt="Dermatology Illustration" />
+      </div>
 
-    <p>
-      DermaSense is a prototype decision-support tool for the early assessment of
-      suspicious skin lesions. It analyzes uploaded lesion images together with
-      optional clinical details such as age, sex, and lesion site.
-    </p>
+      <!-- RIGHT SIDE — TEXT -->
+      <div class="about-content">
+        <h2>About DermaSense</h2>
 
-    <p>
-      The system focuses on three target classes: <strong>Benign</strong>,
-      <strong>Basal Cell Carcinoma (BCC)</strong>, and
-      <strong>Squamous Cell Carcinoma (SCC)</strong>. The goal is to assist
-      clinicians and learners, not to replace clinical judgment.
-    </p>
+        <p>
+          DermaSense is a decision-support tool designed to assist dermatologists and users 
+          in the early assessment of suspicious skin lesions. It analyzes uploaded images 
+          together with optional details such as age, sex, and lesion site.
+        </p>
 
-    <h3>How it works</h3>
-    <ul>
-      <li>Upload a dermoscopic or clinical image of a skin lesion.</li>
-      <li>Optionally provide age, sex, and lesion site for additional context.</li>
-      <li>View the predicted class, confidence level, and explanation image.</li>
-    </ul>
+        <p>
+          The system classifies lesions into:
+          <strong>Benign</strong>, <strong>Basal Cell Carcinoma (BCC)</strong>, and 
+          <strong>Squamous Cell Carcinoma (SCC)</strong>.
+          It provides insights to support learning and clinical evaluation.
+        </p>
 
-    <p class="disclaimer">
-      <strong>Disclaimer:</strong> DermaSense is a research prototype and not a
-      diagnostic tool. All outputs must be confirmed by a board-certified
-      dermatologist.
-    </p>
+        <h3>How it Works</h3>
+        <ul>
+          <li>Upload a dermoscopic or clinical image of a lesion.</li>
+          <li>Optionally enter age, sex, and lesion location.</li>
+          <li>Receive classification, confidence score, and explanation.</li>
+        </ul>
+
+        <p class="disclaimer">
+          <strong>Disclaimer:</strong> DermaSense is a research prototype and not a diagnostic tool. 
+          Final evaluation must be performed by a licensed dermatologist.
+        </p>
+      </div>
+
+    </div>
   </section>
 </template>
 
 <style scoped>
-.about {
-  max-width: 800px;
+/* Section background */
+.about-section {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+  background-color: #f7efe7; /* nude background */
 }
-h2 {
-  color: #234a7c;
+
+/* Main card */
+.about-card {
+  display: flex;
+  gap: 40px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 1150px;
+  width: 100%;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* LEFT image block */
+.about-image-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-image {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 18px;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* RIGHT text block */
+.about-content {
+  flex: 1.3;
+}
+
+.about-content h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c2c2c;
   margin-bottom: 14px;
+  font-family: "Poppins", sans-serif;
 }
-h3 {
-  color: #234a7c;
-  margin: 18px 0 8px;
+
+.about-content h3 {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c2c2c;
 }
-p {
-  font-size: 14px;
-  color: #4b5c73;
-  margin-bottom: 10px;
+
+.about-content p {
+  font-size: 16px;
+  line-height: 1.55;
+  color: #3a3a3a;
+  margin-bottom: 12px;
 }
+
 ul {
-  margin-left: 18px;
-  margin-bottom: 16px;
-  font-size: 14px;
-  color: #4b5c73;
+  margin: 10px 0 20px 20px;
+  color: #3a3a3a;
+  font-size: 15px;
 }
+
 .disclaimer {
-  font-size: 12px;
-  background-color: #fff9e6;
-  padding: 10px 12px;
-  border-radius: 6px;
+  background: #fff4d9;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #6b4e2d;
+}
+
+/* Responsive for mobile */
+@media (max-width: 900px) {
+  .about-card {
+    flex-direction: column;
+    padding: 25px;
+  }
+
+  .about-image {
+    max-width: 100%;
+  }
 }
 </style>
