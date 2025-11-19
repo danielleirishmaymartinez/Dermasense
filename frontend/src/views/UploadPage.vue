@@ -92,7 +92,9 @@ const submit = async () => {
     form.append("site", site.value);
 
     const { data } = await api.post("/analyze", form);
+
     localStorage.setItem("analysisResult", JSON.stringify(data));
+    
     router.push("/results");
   } catch (err) {
     console.error(err);

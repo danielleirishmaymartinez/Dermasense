@@ -4,7 +4,7 @@
       
       <!-- LEFT SIDE — IMAGE -->
       <div class="about-image-wrapper">
-        <img src="@/assets/About.jpg" class="about-image" alt="Dermatology Illustration" />
+        <img src="@/assets/About.jpg" class="about-image" alt="About-image" />
       </div>
 
       <!-- RIGHT SIDE — TEXT -->

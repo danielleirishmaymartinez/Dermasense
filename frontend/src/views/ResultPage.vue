@@ -1,22 +1,46 @@
 <template>
   <section class="result-page">
-    <div v-if="result" class="result-card">
+    <!-- ERROR STATE FROM BACKEND -->
+    <div v-if="errorMessage" class="empty-message">
+      {{ errorMessage }}
+      <br />
+      Please try uploading another image on the
+      <strong>Upload Image</strong> page.
+    </div>
+
+    <!-- NO RESULT YET -->
+    <div v-else-if="!result" class="empty-message">
+      No analysis result found. Please upload an image on the
+      <strong>Upload Image</strong> page first.
+    </div>
+
+    <!-- WE HAVE A RESULT -->
+    <div v-else class="result-card">
       <h1>Analysis Results</h1>
 
       <div class="result">
-        <!-- IMAGE BLOCK -->
+        <!-- IMAGE -->
         <div class="image" v-if="imageUrl">
-          <img :src="imageUrl" alt="Analyzed lesion image" />
+          <img :src="imageUrl" alt="Analyzed Image" />
         </div>
 
-        <!-- TEXT BLOCK -->
+        <!-- TEXT DETAILS -->
         <div class="details">
           <h2 class="label">{{ result.label }}</h2>
+
           <p class="confidence">
-            <strong>Confidence:</strong> {{ result.confidence_display }}
+            <strong>Confidence:</strong> {{ confidenceDisplay }}
           </p>
+
           <p class="description">
             {{ result.description }}
+          </p>
+
+          <p class="doctor-note">
+            <strong>Reminder:</strong> This result is for educational and
+            decision-support purposes only. It is always best to consult a
+            board-certified dermatologist for a full evaluation and treatment
+            plan.
           </p>
         </div>
       </div>
@@ -25,9 +49,8 @@
       <div class="treatments" v-if="treatments.length">
         <h3>Possible Treatments</h3>
         <p class="treatment-note">
-          These suggested treatments are based on the detected lesion type and are for
-          educational purposes only. Always consult a dermatologist for an actual
-          treatment plan and medical advice.
+          These treatments are common options based on the detected lesion type.
+          They do not replace professional medical advice.
         </p>
 
         <div class="treatment-cards">
@@ -42,77 +65,88 @@
         </div>
       </div>
     </div>
-
-    <p v-else class="empty-message">
-      No analysis result found. Please upload an image on the <strong>Upload Image</strong>
-      page first.
-    </p>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 const result = ref(null);
 const imageUrl = ref("");
 const treatments = ref([]);
+const errorMessage = ref("");
 
-// 👇 adjust this if your backend URL is different
-const BACKEND_BASE = "http://127.0.0.1:8000";
+// In case backend returns "confidence_display" OR plain "confidence"
+const confidenceDisplay = computed(() => {
+  if (!result.value) return "";
+  if (result.value.confidence_display) return result.value.confidence_display;
+  if (typeof result.value.confidence === "number") {
+    // format numeric confidence like "92.3%"
+    return `${(result.value.confidence * 100).toFixed(1)}%`;
+  }
+  return result.value.confidence || "";
+});
 
 const treatmentOptions = {
   "No Skin Cancer (Benign)": [
     {
       name: "Skin Moisturization",
       description:
-        "Use gentle moisturizers and sunscreen to keep the skin barrier healthy.",
+        "Use gentle moisturizers and daily sunscreen to keep the skin barrier healthy.",
     },
     {
       name: "Regular Skin Checks",
       description:
-        "Monitor the lesion for changes and schedule routine skin examinations.",
+        "Monitor the area for changes in size, color, or shape and schedule routine skin examinations.",
     },
   ],
   "Basal Cell Carcinoma (BCC)": [
     {
       name: "Surgical Removal",
       description:
-        "Minor surgery or excision is commonly used to remove BCC lesions.",
+        "Minor surgery or excision is commonly used to remove BCC lesions with clear margins.",
     },
     {
       name: "Cryotherapy",
       description:
-        "Freezing the lesion with liquid nitrogen to destroy abnormal cells.",
+        "Freezing the lesion with liquid nitrogen to destroy abnormal cells in small or superficial BCCs.",
     },
   ],
   "Squamous Cell Carcinoma (SCC)": [
     {
       name: "Surgical Excision",
       description:
-        "Removal of the lesion with a margin of healthy tissue to reduce recurrence.",
+        "Removal of the lesion with a margin of healthy tissue to reduce the risk of recurrence.",
     },
     {
       name: "Radiation Therapy",
       description:
-        "Used in select SCC cases, especially in areas where surgery is difficult.",
+        "Sometimes used for SCC in locations where surgery is difficult or for certain high-risk lesions.",
     },
   ],
 };
 
 onMounted(() => {
+  // Check if backend stored an error
+  const storedError = localStorage.getItem("analysisError");
+  if (storedError) {
+    errorMessage.value = storedError;
+  }
+
   const stored = localStorage.getItem("analysisResult");
   if (!stored) return;
 
-  result.value = JSON.parse(stored);
-
-  // 🖼 Fix: build full URL so the image loads from FastAPI, not Vite
-  if (result.value.image_url) {
-    const url = result.value.image_url;
-    imageUrl.value = url.startsWith("http")
-      ? url
-      : `${BACKEND_BASE}${url}`;
+  try {
+    const parsed = JSON.parse(stored);
+    console.log("Loaded analysisResult from localStorage:", parsed);
+    result.value = parsed;
+  } catch (e) {
+    console.error("Failed to parse analysisResult:", e);
+    errorMessage.value = "Could not read saved analysis result.";
+    return;
   }
 
+  imageUrl.value = result.value.image_url || "";
   treatments.value = treatmentOptions[result.value.label] || [];
 });
 </script>
@@ -123,6 +157,7 @@ onMounted(() => {
   padding: 40px 16px 60px;
 }
 
+/* Main white card */
 .result-card {
   max-width: 1150px;
   margin: 0 auto;
@@ -139,7 +174,7 @@ onMounted(() => {
   font-weight: 700;
 }
 
-/* main layout: image + text */
+/* Layout: image + text */
 .result {
   display: flex;
   gap: 32px;
@@ -183,6 +218,16 @@ onMounted(() => {
   font-size: 16px;
   line-height: 1.7;
   color: #3f3f3f;
+  margin-bottom: 14px;
+}
+
+.doctor-note {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6a4d34;
+  background-color: #fff4d9;
+  padding: 10px 14px;
+  border-radius: 10px;
 }
 
 /* TREATMENTS */
@@ -229,10 +274,10 @@ onMounted(() => {
   line-height: 1.6;
 }
 
-/* Empty state */
+/* Empty state / error state */
 .empty-message {
   max-width: 700px;
-  margin: 40px auto;
+  margin: 60px auto;
   font-size: 16px;
   text-align: center;
   color: #444444;

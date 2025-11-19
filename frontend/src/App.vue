@@ -21,7 +21,7 @@ import NavBar from "@/components/NavBar.vue";
 }
 
 body {
-  background-color: #f7efe7; /* soft nude */
+  background-color: #e7eff7; /* soft nude */
 }
 
 .app-root {
