@@ -21,65 +21,96 @@
 
 <style scoped>
 .nav-wrapper {
-  background-color: #d2e2f8;
-  border-bottom: 1px solid #e1cdbd;
+  background-color: var(--medical-white);
+  border-bottom: 2px solid var(--medical-blue-light);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.08);
 }
 
 .nav-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 18px 24px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .brand {
-  font-family: "Playfair Display", serif;
-  font-size: 48px;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  font-size: 28px;
   font-weight: 700;
-  font-style: italic;
-  color: #2b2b2b;
+  color: var(--medical-blue);
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.brand:hover{
+
+.brand::before {
+  content: "⚕";
+  font-size: 32px;
+  color: var(--medical-teal);
+}
+
+.brand:hover {
   cursor: pointer;
+  color: var(--medical-blue-dark);
+  transition: color 0.2s ease;
 }
+
 nav {
   display: flex;
-  gap: 30px;
+  gap: 32px;
+  align-items: center;
 }
 
 .link {
   text-decoration: none;
-  color: #3b3b3b;
-  font-size: 18px; /* bigger nav text */
-  font-weight: 600;
-  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+  color: var(--medical-gray-700);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Inter', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .link.active {
-  border-bottom: 2px solid #0c0c0c;
-  padding-bottom: 3px;
+  color: var(--medical-blue);
+  background-color: var(--medical-blue-light);
+  font-weight: 600;
 }
 
 .link:hover {
-  color: #9da5f4;
+  color: var(--medical-blue);
+  background-color: var(--medical-gray-50);
 }
 
 @media (max-width: 768px) {
   .nav-inner {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     align-items: flex-start;
   }
 
   .brand {
-    font-size: 32px;
+    font-size: 24px;
+  }
+
+  .brand::before {
+    font-size: 28px;
   }
 
   nav {
-    gap: 18px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .link {
+    font-size: 14px;
+    padding: 6px 10px;
   }
 }
 </style>

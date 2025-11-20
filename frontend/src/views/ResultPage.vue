@@ -153,32 +153,44 @@ onMounted(() => {
 
 <style scoped>
 .result-page {
-  background-color: #f7efe7; /* nude */
+  background: linear-gradient(135deg, var(--medical-gray-50) 0%, var(--medical-blue-light) 100%);
   padding: 40px 16px 60px;
+  min-height: calc(100vh - 200px);
 }
 
 /* Main white card */
 .result-card {
   max-width: 1150px;
   margin: 0 auto;
-  background-color: #ffffff;
-  border-radius: 24px;
-  padding: 32px 36px 40px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  background-color: var(--medical-white);
+  border-radius: 16px;
+  padding: 40px 44px 48px;
+  box-shadow: 0 12px 40px rgba(0, 102, 204, 0.15);
+  border: 1px solid var(--medical-gray-200);
 }
 
 .result-card h1 {
-  font-size: 32px;
-  margin-bottom: 24px;
-  color: #222222;
+  font-size: 36px;
+  margin-bottom: 32px;
+  color: var(--medical-gray-900);
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 3px solid var(--medical-blue);
+  padding-bottom: 16px;
+}
+
+.result-card h1::before {
+  content: "📊";
+  font-size: 40px;
 }
 
 /* Layout: image + text */
 .result {
   display: flex;
-  gap: 32px;
-  margin-bottom: 32px;
+  gap: 40px;
+  margin-bottom: 40px;
   align-items: flex-start;
 }
 
@@ -190,10 +202,11 @@ onMounted(() => {
 
 .image img {
   width: 100%;
-  border-radius: 18px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-  background-color: #fdf7f1;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background-color: var(--medical-gray-50);
   object-fit: cover;
+  border: 3px solid var(--medical-blue-light);
 }
 
 /* TEXT */
@@ -202,99 +215,172 @@ onMounted(() => {
 }
 
 .label {
-  font-size: 26px;
-  margin-bottom: 10px;
-  color: #222222;
+  font-size: 28px;
+  margin-bottom: 16px;
+  color: var(--medical-gray-900);
   font-weight: 700;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--medical-blue-light) 0%, var(--medical-teal-light) 100%);
+  border-radius: 8px;
+  border-left: 4px solid var(--medical-blue);
+  display: inline-block;
 }
 
 .confidence {
-  margin-bottom: 12px;
-  color: #333333;
-  font-size: 16px;
+  margin-bottom: 16px;
+  color: var(--medical-gray-800);
+  font-size: 17px;
+  font-weight: 600;
+  padding: 10px 16px;
+  background-color: var(--medical-gray-50);
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.confidence strong {
+  color: var(--medical-blue);
 }
 
 .description {
   font-size: 16px;
-  line-height: 1.7;
-  color: #3f3f3f;
-  margin-bottom: 14px;
+  line-height: 1.8;
+  color: var(--medical-gray-700);
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: var(--medical-gray-50);
+  border-radius: 8px;
+  border-left: 4px solid var(--medical-teal);
 }
 
 .doctor-note {
   font-size: 14px;
-  line-height: 1.6;
-  color: #6a4d34;
-  background-color: #fff4d9;
-  padding: 10px 14px;
+  line-height: 1.7;
+  color: var(--medical-gray-800);
+  background: linear-gradient(135deg, var(--medical-red-light) 0%, #FFE5E5 100%);
+  padding: 16px 20px;
   border-radius: 10px;
+  border-left: 4px solid var(--medical-red);
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.1);
+}
+
+.doctor-note strong {
+  color: var(--medical-red);
 }
 
 /* TREATMENTS */
 .treatments {
-  margin-top: 10px;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 2px solid var(--medical-gray-200);
 }
 
 .treatments h3 {
-  font-size: 22px;
-  margin-bottom: 8px;
-  color: #222222;
+  font-size: 24px;
+  margin-bottom: 12px;
+  color: var(--medical-gray-900);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.treatments h3::before {
+  content: "💊";
+  font-size: 28px;
 }
 
 .treatment-note {
-  font-size: 14px;
-  color: #5e5e5e;
-  margin-bottom: 18px;
+  font-size: 15px;
+  color: var(--medical-gray-600);
+  margin-bottom: 24px;
   max-width: 780px;
+  line-height: 1.6;
 }
 
 .treatment-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
 }
 
 .treatment-card {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 18px 20px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
-  border: 1px solid #f0e0d3;
+  background: linear-gradient(135deg, var(--medical-white) 0%, var(--medical-blue-light) 100%);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  border: 1.5px solid var(--medical-blue-light);
+  transition: all 0.3s ease;
+}
+
+.treatment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.2);
+  border-color: var(--medical-blue);
 }
 
 .treatment-card h4 {
-  font-size: 17px;
-  margin-bottom: 8px;
-  color: #222222;
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--medical-blue-dark);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.treatment-card h4::before {
+  content: "✓";
+  color: var(--medical-teal);
+  font-size: 20px;
 }
 
 .treatment-card p {
-  font-size: 14px;
-  color: #444444;
-  line-height: 1.6;
+  font-size: 15px;
+  color: var(--medical-gray-700);
+  line-height: 1.7;
 }
 
 /* Empty state / error state */
 .empty-message {
   max-width: 700px;
-  margin: 60px auto;
-  font-size: 16px;
+  margin: 80px auto;
+  font-size: 17px;
   text-align: center;
-  color: #444444;
+  color: var(--medical-gray-700);
+  padding: 40px;
+  background-color: var(--medical-white);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--medical-gray-200);
+}
+
+.empty-message strong {
+  color: var(--medical-blue);
+  font-weight: 600;
 }
 
 /* Responsive */
 @media (max-width: 900px) {
   .result-card {
-    padding: 24px 18px 28px;
+    padding: 30px 24px 36px;
+  }
+
+  .result-card h1 {
+    font-size: 28px;
   }
 
   .result {
     flex-direction: column;
+    gap: 30px;
   }
 
   .image {
     max-width: 100%;
+  }
+
+  .treatment-cards {
+    grid-template-columns: 1fr;
   }
 }
 </style>

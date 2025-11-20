@@ -16,17 +16,17 @@ import NavBar from "@/components/NavBar.vue";
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+  font-family: 'Inter', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
 }
 
 body {
-  background-color: #e7eff7; /* soft nude */
+  background-color: var(--medical-gray-50);
 }
 
 .app-root {
   min-height: 100vh;
-  background-color: #f7efe7;
+  background-color: var(--medical-gray-50);
 }
 
 .page {

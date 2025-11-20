@@ -107,21 +107,31 @@ const submit = async () => {
 
 <style scoped>
 .upload-card {
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 32px 36px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+  background-color: var(--medical-white);
+  border-radius: 16px;
+  padding: 40px 44px;
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.1);
+  border: 1px solid var(--medical-gray-200);
 }
 
 h2 {
-  font-size: 28px;
-  color: #262626;
-  margin-bottom: 20px;
+  font-size: 32px;
+  color: var(--medical-gray-900);
+  margin-bottom: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+h2::before {
+  content: "📤";
+  font-size: 36px;
 }
 
 .layout {
   display: flex;
-  gap: 32px;
+  gap: 40px;
   align-items: flex-start;
 }
 
@@ -131,86 +141,160 @@ h2 {
 }
 
 .dropzone {
-  background-color: #fdf7f1;
-  border-radius: 16px;
-  padding: 32px;
+  background: linear-gradient(135deg, var(--medical-blue-light) 0%, var(--medical-teal-light) 100%);
+  border-radius: 12px;
+  padding: 40px;
   text-align: center;
-  border: 2px dashed #d0b39a;
+  border: 2px dashed var(--medical-blue);
   cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dropzone:hover {
+  border-color: var(--medical-blue-dark);
+  background: linear-gradient(135deg, var(--medical-teal-light) 0%, var(--medical-blue-light) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.15);
 }
 
 .dropzone p {
-  color: #7a644f;
-  font-size: 15px;
+  color: var(--medical-blue-dark);
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+.dropzone p::before {
+  content: "🩺";
+  font-size: 48px;
+  display: block;
+  margin-bottom: 8px;
 }
 
 .dropzone img {
-  max-width: 260px;
-  max-height: 260px;
+  max-width: 100%;
+  max-height: 280px;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: 10px;
+  border: 2px solid var(--medical-white);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 }
 
 h3 {
-  font-size: 18px;
-  color: #3f3f3f;
-  margin-bottom: 14px;
+  font-size: 20px;
+  color: var(--medical-gray-900);
+  margin-bottom: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+h3::before {
+  content: "📋";
+  font-size: 24px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 18px;
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
 .field label {
-  font-size: 13px;
-  color: #5f5f5f;
-  margin-bottom: 4px;
+  font-size: 14px;
+  color: var(--medical-gray-700);
+  margin-bottom: 8px;
   display: block;
+  font-weight: 500;
 }
 
 .field input,
 .field select {
   width: 100%;
-  padding: 9px 10px;
+  padding: 12px 14px;
   border-radius: 8px;
-  border: 1px solid #d7c3b2;
-  font-size: 14px;
-  background-color: #fff;
+  border: 1.5px solid var(--medical-gray-300);
+  font-size: 15px;
+  background-color: var(--medical-white);
+  color: var(--medical-gray-900);
+  transition: all 0.2s ease;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--medical-blue);
+  box-shadow: 0 0 0 3px var(--medical-blue-light);
 }
 
 .analyze {
-  margin-top: 10px;
-  padding: 12px 24px;
+  margin-top: 8px;
+  padding: 14px 32px;
   border: none;
-  border-radius: 999px;
-  background-color: #2f3a4c;
-  color: #ffffff;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  color: var(--medical-white);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+  width: 100%;
+}
+
+.analyze:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--medical-blue-dark) 0%, var(--medical-teal-dark) 100%);
+  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+  transform: translateY(-2px);
+}
+
+.analyze:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .analyze:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
 .error {
-  margin-top: 10px;
-  color: #c53030;
-  font-size: 13px;
+  margin-top: 16px;
+  color: var(--medical-red);
+  font-size: 14px;
+  padding: 12px 16px;
+  background-color: var(--medical-red-light);
+  border-radius: 8px;
+  border-left: 4px solid var(--medical-red);
+  font-weight: 500;
 }
 
 @media (max-width: 900px) {
+  .upload-card {
+    padding: 30px 24px;
+  }
+
   .layout {
     flex-direction: column;
+    gap: 30px;
   }
 
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .dropzone {
+    min-height: 250px;
   }
 }
 </style>
