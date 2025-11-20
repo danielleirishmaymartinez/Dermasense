@@ -8,6 +8,9 @@
         <router-link to="/about" class="link" active-class="active">
           About
         </router-link>
+        <router-link to="/skin-self-exam" class="link" active-class="active">
+          Self-Exam Guide
+        </router-link>
         <router-link to="/upload" class="link" active-class="active">
           Upload Image
         </router-link>
