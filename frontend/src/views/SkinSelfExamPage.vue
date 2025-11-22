@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <!-- What You Need Section -->
+    
       <div class="section-card">
         <h2>
           <span class="icon">📋</span>
