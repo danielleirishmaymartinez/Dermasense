@@ -109,7 +109,7 @@
 
 .cta {
   background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-blue-dark) 100%);
-  color: white;
+  color: rgb(9, 9, 9);
   padding: 16px 36px;
   border: none;
   border-radius: 8px;

@@ -1,7 +1,6 @@
 <template>
   <section class="about-section">
     <div class="about-card">
-      
       <!-- LEFT SIDE — IMAGE -->
       <div class="about-image-wrapper">
         <img src="@/assets/About.jpg" class="about-image" alt="About-image" />
@@ -24,19 +23,36 @@
           It provides insights to support learning and clinical evaluation.
         </p>
 
+        <!-- HOW IT WORKS -->
         <h3>How it Works</h3>
-        <ul>
-          <li>Upload a dermoscopic or clinical image of a lesion.</li>
-          <li>Optionally enter age, sex, and lesion location.</li>
-          <li>Receive classification, confidence score, and explanation.</li>
+        <ul class="how-list">
+          <li>
+            <span class="bullet-dot"></span>
+            <span class="how-text">
+              Upload a dermoscopic or clinical image of a lesion.
+            </span>
+          </li>
+          <li>
+            <span class="bullet-dot"></span>
+            <span class="how-text">
+              Optionally enter age, sex, and lesion location.
+            </span>
+          </li>
+          <li>
+            <span class="bullet-dot"></span>
+            <span class="how-text">
+              Receive classification, confidence score, and explanation.
+            </span>
+          </li>
         </ul>
 
+        <!-- DISCLAIMER (plain text, red) -->
         <p class="disclaimer">
-          <strong>Disclaimer:</strong> DermaSense is a research prototype and not a diagnostic tool. 
+          <strong>Disclaimer:</strong>
+          DermaSense is a research prototype and not a diagnostic tool. 
           Final evaluation must be performed by a licensed dermatologist.
         </p>
       </div>
-
     </div>
   </section>
 </template>
@@ -47,7 +63,11 @@
   display: flex;
   justify-content: center;
   padding: 40px 0;
-  background: linear-gradient(135deg, var(--medical-gray-50) 0%, var(--medical-teal-light) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--medical-gray-50) 0%,
+    var(--medical-teal-light) 100%
+  );
 }
 
 /* Main card */
@@ -108,12 +128,14 @@
   font-size: 42px;
 }
 
+/* HOW IT WORKS TITLE – a bit smaller */
 .about-content h3 {
   margin-top: 28px;
   margin-bottom: 16px;
-  font-size: 22px;
+  font-size: 22px;              /* smaller now */
   font-weight: 700;
   color: var(--medical-blue-dark);
+  letter-spacing: 0.02em;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -136,40 +158,56 @@
   font-weight: 600;
 }
 
-ul {
-  margin: 12px 0 24px 24px;
-  color: var(--medical-gray-700);
-  font-size: 16px;
-  line-height: 1.8;
+/* HOW IT WORKS – bullet cards with clearer shadow */
+.how-list {
+  list-style: none;
+  margin: 0 0 24px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-ul li {
-  margin-bottom: 10px;
-  padding-left: 8px;
+.how-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10); /* stronger, more precise shadow */
+  border: 1px solid var(--medical-gray-150, #e5ecf4);
 }
 
-ul li::marker {
-  color: var(--medical-teal);
-  font-weight: bold;
+.bullet-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  margin-top: 7px;
+  background: var(--medical-teal);
+}
+
+.how-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--medical-gray-800);
 }
 
 .disclaimer {
-  background: linear-gradient(135deg, var(--medical-red-light) 0%, #FFE5E5 100%);
-  padding: 18px 22px;
-  border-radius: 10px;
+  margin-top: 16px;
   font-size: 15px;
-  color: var(--medical-gray-800);
-  border-left: 4px solid var(--medical-red);
-  margin-top: 24px;
-  font-weight: 500;
-  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.1);
   line-height: 1.7;
+  /* pure red text for the whole sentence */
+  color: #d32f2f !important;
+  font-weight: 500;
 }
 
 .disclaimer strong {
-  color: var(--medical-red);
+  /* keep the word “Disclaimer:” the same red */
+  color: #d32f2f !important;
   font-weight: 700;
 }
+
 
 /* Responsive for mobile */
 @media (max-width: 900px) {

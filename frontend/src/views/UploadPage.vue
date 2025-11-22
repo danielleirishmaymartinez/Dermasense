@@ -171,7 +171,6 @@ h2::before {
 }
 
 .dropzone p::before {
-  content: "🩺";
   font-size: 48px;
   display: block;
   margin-bottom: 8px;
