@@ -1,0 +1,16 @@
+# Python venvs
+.venv/
+venv/
+backend/venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Node stuff
+node_modules/
+frontend/node_modules/
+
+# (optional) if you don’t want to track big models in git:
+# backend/models/*.h5
+# backend/models/*.pkl
