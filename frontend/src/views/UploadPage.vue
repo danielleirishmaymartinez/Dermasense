@@ -126,6 +126,7 @@ const submit = async () => {
 </script>
 
 
+
 <style scoped>
 .upload-card {
   background-color: var(--medical-white);
