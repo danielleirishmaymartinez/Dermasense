@@ -179,7 +179,7 @@
 }
 
 .about-hero h1 {
-  font-size: 48px;
+  font-size: 38px; /* Adjusted the size */
   font-weight: 700;
   color: var(--medical-gray-900);
   margin-bottom: 16px;
@@ -218,7 +218,7 @@
 }
 
 .intro-card h2 {
-  font-size: 32px;
+  font-size: 28px; /* Adjusted the size */
   font-weight: 700;
   color: var(--medical-gray-900);
   margin-bottom: 20px;

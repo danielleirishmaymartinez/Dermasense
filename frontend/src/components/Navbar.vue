@@ -2,21 +2,15 @@
   <header class="nav-wrapper">
     <div class="nav-inner">
       <div class="brand" @click="$router.push('/')">
+        <!-- Add the logo image here -->
+        <img src="/logo.png" alt="DermaSense Logo" class="logo" />
         DermaSense
       </div>
       <nav>
-        <router-link to="/about" class="link" active-class="active">
-          About
-        </router-link>
-        <router-link to="/skin-self-exam" class="link" active-class="active">
-          Self-Exam Guide
-        </router-link>
-        <router-link to="/upload" class="link" active-class="active">
-          Upload Image
-        </router-link>
-        <router-link to="/results" class="link" active-class="active">
-          Results
-        </router-link>
+        <router-link to="/about" class="link" active-class="active">About</router-link>
+        <router-link to="/skin-self-exam" class="link" active-class="active">Self-Exam Guide</router-link>
+        <router-link to="/upload" class="link" active-class="active">Upload Image</router-link>
+        <router-link to="/results" class="link" active-class="active">Results</router-link>
       </nav>
     </div>
   </header>
@@ -49,16 +43,16 @@
   gap: 8px;
 }
 
-.brand::before {
-  content: "⚕";
-  font-size: 32px;
-  color: var(--medical-teal);
-}
-
 .brand:hover {
   cursor: pointer;
   color: var(--medical-blue-dark);
   transition: color 0.2s ease;
+}
+
+/* Add styles for the logo */
+.logo {
+  width: 40px; /* Adjust size as necessary */
+  height: auto;
 }
 
 nav {
@@ -72,8 +66,7 @@ nav {
   color: var(--medical-gray-700);
   font-size: 15px;
   font-weight: 500;
-  font-family: 'Inter', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: 'Inter', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   padding: 8px 12px;
   border-radius: 6px;
   transition: all 0.2s ease;

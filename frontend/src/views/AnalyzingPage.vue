@@ -39,11 +39,6 @@ h2 {
   gap: 12px;
 }
 
-h2::before {
-  content: "🔬";
-  font-size: 32px;
-}
-
 p {
   color: var(--medical-gray-700);
   font-size: 16px;

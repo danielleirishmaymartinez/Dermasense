@@ -27,7 +27,6 @@
     
       <div class="section-card">
         <h2>
-          <span class="icon">📋</span>
           What You Need for a Skin Self-Exam
         </h2>
         <p class="section-intro">
@@ -79,7 +78,6 @@
       <!-- Step-by-Step Instructions -->
       <div class="section-card">
         <h2>
-          <span class="icon">👤</span>
           Skin Self-Exam Steps
         </h2>
         <p class="section-intro">
@@ -159,7 +157,6 @@
       <!-- What to Look For Section -->
       <div class="section-card warning-card">
         <h2>
-          <span class="icon">🔍</span>
           What Should I Look For?
         </h2>
         <p class="section-intro">
@@ -247,7 +244,7 @@
 }
 
 .header-section h1 {
-  font-size: 42px;
+  font-size: 40px;
   color: var(--medical-gray-900);
   margin-bottom: 20px;
   font-weight: 700;
@@ -318,7 +315,7 @@
 }
 
 .section-card h2 {
-  font-size: 32px;
+  font-size: 30px;
   color: var(--medical-gray-900);
   margin-bottom: 20px;
   font-weight: 700;
@@ -415,7 +412,7 @@
 }
 
 .tip-box h3 {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--medical-teal-dark);
   margin-bottom: 16px;
   font-weight: 700;

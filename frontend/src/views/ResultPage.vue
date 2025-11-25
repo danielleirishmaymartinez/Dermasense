@@ -28,10 +28,6 @@
         <div class="details">
           <h2 class="label">{{ result.label }}</h2>
 
-          <p class="confidence">
-            <strong>Confidence:</strong> {{ confidenceDisplay }}
-          </p>
-
           <p class="description">
             {{ result.description }}
           </p>
@@ -76,15 +72,6 @@ const imageUrl = ref("");
 const treatments = ref([]);
 const errorMessage = ref("");
 
-// confidence_display from backend OR numeric confidence (0–1)
-const confidenceDisplay = computed(() => {
-  if (!result.value) return "";
-  if (result.value.confidence_display) return result.value.confidence_display;
-  if (typeof result.value.confidence === "number") {
-    return `${(result.value.confidence * 100).toFixed(1)}%`;
-  }
-  return "";
-});
 
 const treatmentOptions = {
   "No Skin Cancer (Benign)": [
@@ -186,10 +173,6 @@ onMounted(() => {
   padding-bottom: 16px;
 }
 
-.result-card h1::before {
-  content: "📊";
-  font-size: 40px;
-}
 
 /* Layout: image + text */
 .result {
@@ -287,10 +270,6 @@ onMounted(() => {
   gap: 10px;
 }
 
-.treatments h3::before {
-  content: "💊";
-  font-size: 28px;
-}
 
 .treatment-note {
   font-size: 15px;

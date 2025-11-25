@@ -94,7 +94,7 @@
 }
 
 .hero-right h1 {
-  font-size: 42px;
+  font-size: 38px;
   color: var(--medical-gray-900);
   margin-bottom: 20px;
   font-family: 'Inter', 'Roboto', sans-serif;
@@ -103,16 +103,12 @@
   letter-spacing: -0.5px;
 }
 
-.hero-right h1::before {
-  content: "🔬 ";
-  color: var(--medical-blue);
-}
 
 .hero-right p {
   color: var(--medical-gray-700);
   font-size: 17px;
   margin-bottom: 32px;
-  max-width: 520px;
+  max-width: 600px;
   line-height: 1.7;
 }
 

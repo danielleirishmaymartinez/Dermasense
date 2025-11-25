@@ -1,7 +1,6 @@
 <template>
   <section class="upload-card">
     <h2>
-      <img src="@/assets/upload.png" alt="Upload" class="title-icon" />
       Upload Skin Lesion Image
     </h2>
 
@@ -137,7 +136,7 @@ const submit = async () => {
 }
 
 h2 {
-  font-size: 32px;
+  font-size: 28px;
   color: var(--medical-gray-900);
   margin-bottom: 32px;
   font-weight: 700;
