@@ -18,30 +18,43 @@
     <div v-else class="result-card">
       <h1>Analysis Results</h1>
 
-      <div class="result">
-        <!-- IMAGE -->
-        <div class="image" v-if="imageUrl">
-          <img :src="imageUrl" alt="Analyzed Image" />
-        </div>
+<div class="result">
+  <!-- IMAGE -->
+  <div class="image" v-if="imageUrl">
+    <img :src="imageUrl" alt="Analyzed Image" />
+  </div>
 
-        <!-- TEXT DETAILS -->
-        <div class="details">
-          <h2 class="label">{{ result.label }}</h2>
+  <!-- TEXT DETAILS -->
+  <div class="details">
 
-          <p class="description">
-            {{ result.description }}
-          </p>
+    <!-- INVALID WARNING -->
+    <div v-if="result.prediction_type === 'invalid'" class="invalid-warning">
+      🚫 This image is not related to BCC or SCC skin lesions.
+    </div>
 
-          <p class="doctor-note">
-            <strong>⚠️Reminder:</strong> This result is not a medical diagnosis and is for 
-            educational and decision-support use only. Always consult a licensed
-             dermatologist for a full evaluation and treatment plan.
-          </p>
-        </div>
-      </div>
+    <h2 class="label">{{ result.label }}</h2>
+
+    <p class="description">
+      {{ result.description }}
+    </p>
+
+    
+    <p v-if="result.prediction_type !== 'invalid'" class="doctor-note">
+  <strong>⚠️Reminder:</strong> This result is not a medical diagnosis and is for 
+  educational and decision-support use only. Always consult a licensed
+  dermatologist for a full evaluation and treatment plan.
+</p>
+
+
+  </div>
+</div>
+
 
       <!-- TREATMENTS -->
-      <div class="treatments" v-if="treatments.length">
+      <div
+  class="treatments"
+  v-if="treatments.length && result.prediction_type === 'lesion'"
+>
         <h3>Possible Treatments Options</h3>
         <p class="treatment-note">
           These are common treatment options that dermatologists may 
@@ -136,9 +149,11 @@ onMounted(() => {
   imageUrl.value = localStorage.getItem("analysisImage") || "";
 
   // Pick treatments based on label returned by backend
-  if (result.value.label) {
-    treatments.value = treatmentOptions[result.value.label] || [];
-  }
+  if (result.value.prediction_type === "lesion") {
+  treatments.value = treatmentOptions[result.value.label] || [];
+} else {
+  treatments.value = [];
+}
 });
 </script>
 
@@ -201,6 +216,17 @@ onMounted(() => {
 .details {
   flex: 1.6;
 }
+
+.invalid-warning {
+  background: #fff3cd;
+  color: #856404;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 5px solid #ffc107;
+  font-weight: 600;
+}
+
 
 .label {
   font-size: 28px;

@@ -24,6 +24,7 @@
           <img src="@/assets/list.png" alt="List" class="subtitle-icon" />
           Optional Clinical Details
         </h3>
+        
         <div class="grid">
           <div class="field">
             <label>Age</label>
@@ -55,6 +56,16 @@
 
         <p v-if="error" class="error">{{ error }}</p>
       </div>
+    </div>
+
+    <!-- Warning Note Spanning Full Width -->
+    <div class="info-note-full">
+      <svg class="note-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <p>
+        <strong>Note:</strong> Only clear images of BCC or SCC skin lesions should be uploaded. Blurry or unclear images may lead to inaccurate results or invalid classification.
+      </p>
     </div>
   </section>
 </template>
@@ -123,8 +134,6 @@ const submit = async () => {
   }
 };
 </script>
-
-
 
 <style scoped>
 .upload-card {
@@ -200,6 +209,38 @@ h2 {
   border: 2px solid var(--medical-white);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1;
+}
+
+/* Info Note Styling - Full Width */
+.info-note-full {
+  margin-top: 24px;
+  padding: 14px 18px;
+  background-color: #FFF4E6;
+  border-left: 4px solid #FF9800;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.info-note-full .note-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: #F57C00;
+  margin-top: 2px;
+}
+
+.info-note-full p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #E65100;
+}
+
+.info-note-full strong {
+  font-weight: 600;
+  color: #BF360C;
 }
 
 h3 {
