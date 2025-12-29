@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import NavBar from "@/components/NavBar.vue";
+import NavBar from "@/components/Navbar.vue";
 </script>
 
 <style>
@@ -21,17 +21,69 @@ import NavBar from "@/components/NavBar.vue";
 }
 
 body {
-  background-color: var(--medical-gray-50);
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f7ff 100%);
+  background-attachment: fixed;
 }
 
 .app-root {
   min-height: 100vh;
-  background-color: var(--medical-gray-50);
+  display: flex;
+  flex-direction: column;
 }
 
 .page {
-  max-width: 1200px;
+  flex: 1;
+  width: 100%;
   margin: 0 auto;
-  padding: 30px 20px 60px;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page > * {
+  width: 100%;
+  max-width: 1400px;
+}
+
+/* Global animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
 }
 </style>

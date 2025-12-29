@@ -1,0 +1,15 @@
+{
+    "labels": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+    ],
+    "thresholds": {
+        "HIGH": 0.35,
+        "MEDIUM": 0.4
+    },
+    "model_info": {
+        "cnn": "DenseNet201 pretrained on ImageNet",
+        "rf": "Random Forest (300 trees)"
+    }
+}

@@ -2,111 +2,233 @@
   <header class="nav-wrapper">
     <div class="nav-inner">
       <div class="brand" @click="$router.push('/')">
-        <!-- Add the logo image here -->
-        <img src="/logo.png" alt="DermaSense Logo" class="logo" />
-        DermaSense
+        <div class="logo-container">
+          <div class="logo-icon">🔬</div>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">DermaSense</span>
+          <span class="brand-tagline">Risk Assessment</span>
+        </div>
       </div>
-      <nav>
-        <router-link to="/about" class="link" active-class="active">About</router-link>
-        <router-link to="/skin-self-exam" class="link" active-class="active">Self-Exam Guide</router-link>
-        <router-link to="/upload" class="link" active-class="active">Upload Image</router-link>
-        <router-link to="/results" class="link" active-class="active">Results</router-link>
+      <nav class="nav-menu">
+        <router-link to="/dashboard" class="nav-link" active-class="active">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Dashboard</span>
+        </router-link>
+        <router-link to="/upload" class="nav-link" active-class="active">
+          <span class="nav-icon">📸</span>
+          <span class="nav-text">New Assessment</span>
+        </router-link>
+        <router-link to="/monitoring" class="nav-link" active-class="active">
+          <span class="nav-icon">📈</span>
+          <span class="nav-text">Monitoring</span>
+        </router-link>
+        <router-link to="/reports" class="nav-link" active-class="active">
+          <span class="nav-icon">📄</span>
+          <span class="nav-text">Reports</span>
+        </router-link>
+        <router-link to="/guide" class="nav-link" active-class="active">
+          <span class="nav-icon">📖</span>
+          <span class="nav-text">Guide</span>
+        </router-link>
       </nav>
     </div>
   </header>
 </template>
 
+<script setup>
+// No authentication needed
+</script>
+
 <style scoped>
 .nav-wrapper {
-  background-color: var(--medical-white);
-  border-bottom: 2px solid var(--medical-blue-light);
-  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.08);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all var(--transition-base);
+}
+
+.nav-wrapper:hover {
+  box-shadow: 0 4px 30px rgba(0, 102, 204, 0.12);
 }
 
 .nav-inner {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 16px 20px;
+  padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-xl);
 }
 
 .brand {
-  font-family: 'Inter', 'Roboto', sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--medical-blue);
-  letter-spacing: -0.5px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-md);
+  cursor: pointer;
+  transition: transform var(--transition-base);
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-md);
 }
 
 .brand:hover {
-  cursor: pointer;
-  color: var(--medical-blue-dark);
-  transition: color 0.2s ease;
+  transform: translateY(-2px);
 }
 
-/* Add styles for the logo */
-.logo {
-  width: 40px; /* Adjust size as necessary */
-  height: auto;
-}
-
-nav {
+.logo-container {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  border-radius: var(--radius-md);
   display: flex;
-  gap: 32px;
   align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-colored);
+  transition: all var(--transition-base);
 }
 
-.link {
+.brand:hover .logo-container {
+  transform: rotate(5deg) scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
+}
+
+.logo-icon {
+  font-size: 24px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-name {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.brand-tagline {
+  font-size: 11px;
+  color: var(--medical-gray-600);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
   text-decoration: none;
   color: var(--medical-gray-700);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
-  font-family: 'Inter', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
   position: relative;
+  white-space: nowrap;
 }
 
-.link.active {
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  transition: width var(--transition-base);
+  border-radius: 2px;
+}
+
+.nav-link:hover {
   color: var(--medical-blue);
-  background-color: var(--medical-blue-light);
+  background: var(--medical-blue-lighter);
+  transform: translateY(-2px);
+}
+
+.nav-link.active {
+  color: var(--medical-blue);
+  background: linear-gradient(135deg, var(--medical-blue-light) 0%, var(--medical-teal-light) 100%);
   font-weight: 600;
+  box-shadow: var(--shadow-sm);
 }
 
-.link:hover {
-  color: var(--medical-blue);
-  background-color: var(--medical-gray-50);
+.nav-link.active::before {
+  width: 80%;
+}
+
+.nav-icon {
+  font-size: 18px;
+  transition: transform var(--transition-base);
+}
+
+.nav-link:hover .nav-icon {
+  transform: scale(1.2);
+}
+
+.nav-text {
+  font-weight: inherit;
+}
+
+@media (max-width: 1024px) {
+  .nav-inner {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .nav-menu {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .brand-tagline {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
-  .nav-inner {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
+  .nav-menu {
+    gap: var(--spacing-xs);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-xs);
+    -webkit-overflow-scrolling: touch;
   }
 
-  .brand {
-    font-size: 24px;
+  .nav-link {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 13px;
   }
 
-  .brand::before {
-    font-size: 28px;
+  .nav-text {
+    display: none;
   }
 
-  nav {
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .link {
-    font-size: 14px;
-    padding: 6px 10px;
+  .nav-link {
+    min-width: 44px;
+    justify-content: center;
   }
 }
 </style>
