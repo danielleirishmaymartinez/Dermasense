@@ -11,33 +11,82 @@
         </div>
       </div>
       <nav class="nav-menu">
-        <router-link to="/dashboard" class="nav-link" active-class="active">
-          <span class="nav-icon">📊</span>
-          <span class="nav-text">Dashboard</span>
-        </router-link>
-        <router-link to="/upload" class="nav-link" active-class="active">
-          <span class="nav-icon">📸</span>
-          <span class="nav-text">New Assessment</span>
-        </router-link>
-        <router-link to="/monitoring" class="nav-link" active-class="active">
-          <span class="nav-icon">📈</span>
-          <span class="nav-text">Monitoring</span>
-        </router-link>
-        <router-link to="/reports" class="nav-link" active-class="active">
-          <span class="nav-icon">📄</span>
-          <span class="nav-text">Reports</span>
-        </router-link>
-        <router-link to="/guide" class="nav-link" active-class="active">
-          <span class="nav-icon">📖</span>
-          <span class="nav-text">Guide</span>
-        </router-link>
+        <template v-if="isAuthenticated">
+          <router-link to="/dashboard" class="nav-link" active-class="active">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+          </router-link>
+          <router-link to="/upload" class="nav-link" active-class="active">
+            <span class="nav-icon">📸</span>
+            <span class="nav-text">New Assessment</span>
+          </router-link>
+          <router-link to="/monitoring" class="nav-link" active-class="active">
+            <span class="nav-icon">📈</span>
+            <span class="nav-text">Monitoring</span>
+          </router-link>
+          <router-link to="/reports" class="nav-link" active-class="active">
+            <span class="nav-icon">📄</span>
+            <span class="nav-text">Reports</span>
+          </router-link>
+          <router-link to="/guide" class="nav-link" active-class="active">
+            <span class="nav-icon">📖</span>
+            <span class="nav-text">Guide</span>
+          </router-link>
+          <router-link to="/profile" class="nav-link" active-class="active">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Profile</span>
+          </router-link>
+          <button @click="handleLogout" class="nav-link logout-button">
+            <span class="nav-icon">🚪</span>
+            <span class="nav-text">Logout</span>
+          </button>
+        </template>
+        <template v-else>
+          <router-link to="/guide" class="nav-link" active-class="active">
+            <span class="nav-icon">📖</span>
+            <span class="nav-text">Guide</span>
+          </router-link>
+          <router-link to="/login" class="nav-link" active-class="active">
+            <span class="nav-icon">🔑</span>
+            <span class="nav-text">Login</span>
+          </router-link>
+          <router-link to="/register" class="nav-link register-link" active-class="active">
+            <span class="nav-text">Sign Up</span>
+          </router-link>
+        </template>
       </nav>
     </div>
   </header>
 </template>
 
 <script setup>
-// No authentication needed
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { authService } from '@/services/auth';
+
+const router = useRouter();
+const isAuthenticated = ref(false);
+
+const checkAuth = () => {
+  isAuthenticated.value = authService.isAuthenticated();
+};
+
+const handleLogout = () => {
+  authService.clearAuth();
+  isAuthenticated.value = false;
+  router.push('/');
+};
+
+onMounted(() => {
+  checkAuth();
+  // Listen for auth changes
+  window.addEventListener('storage', checkAuth);
+});
+
+// Watch for route changes to update auth state
+router.afterEach(() => {
+  checkAuth();
+});
 </script>
 
 <style scoped>
@@ -191,6 +240,24 @@
 
 .nav-text {
   font-weight: inherit;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.register-link {
+  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  color: white !important;
+  font-weight: 600;
+}
+
+.register-link:hover {
+  background: linear-gradient(135deg, var(--medical-teal) 0%, var(--medical-blue) 100%);
+  color: white !important;
 }
 
 @media (max-width: 1024px) {
