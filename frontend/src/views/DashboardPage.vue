@@ -7,7 +7,9 @@
       </div>
       <div class="header-actions">
         <button class="action-button primary" @click="$router.push('/upload')">
-          <span>+</span>
+          <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
           <span>New Assessment</span>
         </button>
       </div>
@@ -20,7 +22,9 @@
         <span class="status-badge">Recent</span>
       </div>
       <div class="risk-display" :class="`risk-${latestAssessment.risk_level.toLowerCase()}`">
-        <div class="risk-icon-large">{{ getRiskIcon(latestAssessment.risk_level) }}</div>
+        <div class="risk-icon-large">
+          <div class="risk-circle-indicator" :class="`risk-${latestAssessment.risk_level.toLowerCase()}`"></div>
+        </div>
         <div class="risk-info">
           <div class="risk-level-text">{{ latestAssessment.risk_level }} Risk</div>
           <div class="risk-score-large">{{ latestAssessment.final_risk_percentage }}</div>
@@ -37,14 +41,19 @@
           <span class="footer-value">{{ formatDate(latestAssessment.timestamp) }}</span>
         </div>
         <button class="view-details-btn" @click="$router.push('/monitoring')">
-          View Details →
+          View Details
+          <svg class="arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </button>
       </div>
     </div>
 
     <!-- Empty State -->
     <div class="empty-state-card" v-else>
-      <div class="empty-icon">📊</div>
+      <svg class="empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
       <h3>No Assessments Yet</h3>
       <p>Start by creating your first risk assessment to track your skin health.</p>
       <button class="action-button primary" @click="$router.push('/upload')">
@@ -59,55 +68,68 @@
     </div>
     <div class="cards-grid">
       <div class="action-card" @click="$router.push('/upload')">
-        <div class="card-glow"></div>
-        <div class="card-content">
-          <div class="card-icon-wrapper primary">
-            <span class="card-icon">📸</span>
-          </div>
-          <h3>New Risk Assessment</h3>
-          <p>Upload a skin lesion image for comprehensive risk analysis using AI and rule-based scoring</p>
-          <div class="card-arrow">→</div>
+        <div class="card-icon-wrapper blue">
+          <svg class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h3>New Risk Assessment</h3>
+        <p>Upload a skin lesion image for comprehensive risk analysis using AI and rule-based scoring</p>
+        <div class="card-arrow">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </div>
       </div>
 
       <div class="action-card" @click="$router.push('/monitoring')">
-        <div class="card-glow"></div>
-        <div class="card-content">
-          <div class="card-icon-wrapper secondary">
-            <span class="card-icon">📊</span>
-          </div>
-          <h3>Monitoring History</h3>
-          <p>View your complete assessment timeline, track trends, and compare results over time</p>
-          <div class="card-arrow">→</div>
+        <div class="card-icon-wrapper cyan">
+          <svg class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <h3>Monitoring History</h3>
+        <p>View your complete assessment timeline, track trends, and compare results over time</p>
+        <div class="card-arrow">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </div>
       </div>
 
       <div class="action-card" @click="$router.push('/reports')">
-        <div class="card-glow"></div>
-        <div class="card-content">
-          <div class="card-icon-wrapper accent">
-            <span class="card-icon">📄</span>
-          </div>
-          <h3>Reports</h3>
-          <p>Generate and download detailed assessment reports with comprehensive risk analysis</p>
-          <div class="card-arrow">→</div>
+        <div class="card-icon-wrapper teal">
+          <svg class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <h3>Reports</h3>
+        <p>Generate and download detailed assessment reports with comprehensive risk analysis</p>
+        <div class="card-arrow">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </div>
       </div>
 
       <div class="action-card" @click="$router.push('/guide')">
-        <div class="card-glow"></div>
-        <div class="card-content">
-          <div class="card-icon-wrapper info">
-            <span class="card-icon">📖</span>
-          </div>
-          <h3>Skin Health Guide</h3>
-          <p>Learn about skin health, ABCDE rule, self-examination techniques, and UV protection</p>
-          <div class="card-arrow">→</div>
+        <div class="card-icon-wrapper green">
+          <svg class="card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <h3>Skin Health Guide</h3>
+        <p>Learn about skin health, ABCDE rule, self-examination techniques, and UV protection</p>
+        <div class="card-arrow">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </div>
       </div>
     </div>
 
-    <!-- Risk Trends (if multiple assessments) -->
+    <!-- Risk Trends -->
     <div class="trends-section" v-if="assessments.length > 1">
       <div class="section-header">
         <div>
@@ -165,12 +187,6 @@ const recentAssessments = computed(() => {
   return assessments.value.slice(-5).reverse();
 });
 
-const getRiskIcon = (level) => {
-  if (level === "HIGH") return "🔴";
-  if (level === "MEDIUM") return "🟡";
-  return "🟢";
-};
-
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", { 
@@ -218,17 +234,17 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-2xl);
-  gap: var(--spacing-lg);
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
 }
 
 .header-content h1 {
-  font-size: 42px;
+  font-size: 2.75rem;
   font-weight: 800;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-xs);
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -236,49 +252,49 @@ onMounted(() => {
 }
 
 .subtitle {
-  font-size: 18px;
-  color: var(--medical-gray-600);
+  font-size: 1.125rem;
+  color: #64748b;
   font-weight: 500;
-}
-
-.header-actions {
-  display: flex;
-  gap: var(--spacing-md);
 }
 
 .action-button {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: 12px 24px;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
   border: none;
-  border-radius: var(--radius-md);
-  font-size: 15px;
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: all 0.3s ease;
 }
 
 .action-button.primary {
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  color: var(--medical-white);
-  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.3);
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  color: white;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
 }
 
 .action-button.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(0, 102, 204, 0.4);
+  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.4);
+}
+
+.btn-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 2.5;
 }
 
 /* Status Card */
 .status-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-2xl);
-  margin-bottom: var(--spacing-2xl);
-  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.12);
-  border: 1px solid rgba(0, 102, 204, 0.1);
+  background: white;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+  border: 1px solid #e2e8f0;
   animation: slideIn 0.6s ease-out;
 }
 
@@ -286,21 +302,21 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 1.5rem;
 }
 
 .status-header h2 {
-  font-size: 24px;
-  color: var(--medical-gray-900);
+  font-size: 1.5rem;
+  color: #1e293b;
   font-weight: 700;
 }
 
 .status-badge {
-  padding: 6px 12px;
-  background: var(--medical-green-light);
-  color: var(--medical-green-dark);
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 0.375rem 0.875rem;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 50px;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -309,31 +325,55 @@ onMounted(() => {
 .risk-display {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xl);
-  padding: var(--spacing-xl);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-xl);
-  transition: all var(--transition-base);
+  gap: 2rem;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .risk-display.risk-high {
-  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-  border: 2px solid var(--medical-red);
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border: 2px solid #ef4444;
 }
 
 .risk-display.risk-medium {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border: 2px solid var(--medical-orange);
+  background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+  border: 2px solid #f97316;
 }
 
 .risk-display.risk-low {
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-  border: 2px solid var(--medical-green);
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border: 2px solid #22c55e;
 }
 
 .risk-icon-large {
-  font-size: 64px;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.risk-circle-indicator {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: 4px solid;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.risk-circle-indicator.risk-high {
+  background: linear-gradient(135deg, #fee2e2, #fca5a5);
+  border-color: #ef4444;
+}
+
+.risk-circle-indicator.risk-medium {
+  background: linear-gradient(135deg, #ffedd5, #fdba74);
+  border-color: #f97316;
+}
+
+.risk-circle-indicator.risk-low {
+  background: linear-gradient(135deg, #dcfce7, #86efac);
+  border-color: #22c55e;
 }
 
 .risk-info {
@@ -341,26 +381,26 @@ onMounted(() => {
 }
 
 .risk-level-text {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-xs);
+  color: #1e293b;
+  margin-bottom: 0.25rem;
 }
 
 .risk-score-large {
-  font-size: 48px;
+  font-size: 3rem;
   font-weight: 800;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-sm);
+  color: #1e293b;
   line-height: 1;
+  margin-bottom: 0.5rem;
 }
 
 .risk-breakdown {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  font-size: 14px;
-  color: var(--medical-gray-600);
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #64748b;
   font-weight: 500;
 }
 
@@ -368,116 +408,129 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--medical-gray-200);
+  padding-top: 1.25rem;
+  border-top: 1px solid #e2e8f0;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: 1rem;
 }
 
 .footer-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.25rem;
 }
 
 .footer-label {
-  font-size: 12px;
-  color: var(--medical-gray-600);
+  font-size: 0.75rem;
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .footer-value {
-  font-size: 15px;
-  color: var(--medical-gray-900);
+  font-size: 0.9375rem;
+  color: #1e293b;
   font-weight: 600;
 }
 
 .view-details-btn {
-  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
   background: transparent;
-  border: 2px solid var(--medical-blue);
-  color: var(--medical-blue);
-  border-radius: var(--radius-md);
-  font-size: 14px;
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: all 0.3s ease;
 }
 
 .view-details-btn:hover {
-  background: var(--medical-blue);
-  color: var(--medical-white);
+  background: #2563eb;
+  color: white;
+  transform: translateX(4px);
+}
+
+.arrow-icon {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 2.5;
+  transition: transform 0.3s ease;
+}
+
+.view-details-btn:hover .arrow-icon {
   transform: translateX(4px);
 }
 
 /* Empty State */
 .empty-state-card {
   text-align: center;
-  padding: var(--spacing-3xl);
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-  margin-bottom: var(--spacing-2xl);
-  border: 2px dashed var(--medical-gray-300);
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2.5rem;
+  border: 2px dashed #cbd5e1;
 }
 
 .empty-icon {
-  font-size: 80px;
-  margin-bottom: var(--spacing-lg);
-  opacity: 0.6;
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1.5rem;
+  stroke: #94a3b8;
+  stroke-width: 1.5;
 }
 
 .empty-state-card h3 {
-  font-size: 24px;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-sm);
+  font-size: 1.5rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
   font-weight: 700;
 }
 
 .empty-state-card p {
-  font-size: 16px;
-  color: var(--medical-gray-600);
-  margin-bottom: var(--spacing-xl);
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 2rem;
 }
 
 /* Section Header */
 .section-header {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 2rem;
 }
 
 .section-header h2 {
-  font-size: 28px;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-xs);
+  font-size: 1.75rem;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
   font-weight: 700;
 }
 
 .section-header p {
-  font-size: 15px;
-  color: var(--medical-gray-600);
+  font-size: 0.9375rem;
+  color: #64748b;
 }
 
 /* Action Cards */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-3xl);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
 }
 
 .action-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(0, 102, 204, 0.1);
+  background: white;
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
   cursor: pointer;
-  transition: all var(--transition-base);
-  overflow: hidden;
+  transition: all 0.3s ease;
   animation: fadeIn 0.6s ease-out both;
 }
 
@@ -486,57 +539,38 @@ onMounted(() => {
 .action-card:nth-child(3) { animation-delay: 0.3s; }
 .action-card:nth-child(4) { animation-delay: 0.4s; }
 
-.card-glow {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity var(--transition-base);
-  background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
-  border-radius: var(--radius-lg);
-  filter: blur(20px);
-  z-index: 0;
-}
-
-.action-card:hover .card-glow {
-  opacity: 0.3;
-}
-
 .action-card:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
-  border-color: var(--medical-blue);
-}
-
-.card-content {
-  position: relative;
-  z-index: 1;
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.12);
+  border-color: #3b82f6;
 }
 
 .card-icon-wrapper {
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-md);
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--spacing-lg);
-  transition: transform var(--transition-base);
+  margin-bottom: 1.25rem;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.card-icon-wrapper.primary {
-  background: linear-gradient(135deg, var(--medical-blue-light) 0%, var(--medical-teal-light) 100%);
+.card-icon-wrapper.blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
 }
 
-.card-icon-wrapper.secondary {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+.card-icon-wrapper.cyan {
+  background: linear-gradient(135deg, #06b6d4 0%, #14b8a6 100%);
 }
 
-.card-icon-wrapper.accent {
-  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+.card-icon-wrapper.teal {
+  background: linear-gradient(135deg, #14b8a6 0%, #10b981 100%);
 }
 
-.card-icon-wrapper.info {
-  background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+.card-icon-wrapper.green {
+  background: linear-gradient(135deg, #10b981 0%, #22c55e 100%);
 }
 
 .action-card:hover .card-icon-wrapper {
@@ -544,27 +578,37 @@ onMounted(() => {
 }
 
 .card-icon {
-  font-size: 32px;
+  width: 1.75rem;
+  height: 1.75rem;
+  stroke: white;
+  stroke-width: 2;
 }
 
 .action-card h3 {
-  font-size: 20px;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-sm);
+  font-size: 1.25rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
   font-weight: 700;
 }
 
 .action-card p {
-  font-size: 14px;
-  color: var(--medical-gray-700);
+  font-size: 0.875rem;
+  color: #475569;
   line-height: 1.6;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 1rem;
 }
 
 .card-arrow {
-  font-size: 24px;
-  color: var(--medical-blue);
-  transition: transform var(--transition-base);
+  display: flex;
+  align-items: center;
+  color: #2563eb;
+  transition: transform 0.3s ease;
+}
+
+.card-arrow svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 2.5;
 }
 
 .action-card:hover .card-arrow {
@@ -573,26 +617,25 @@ onMounted(() => {
 
 /* Trends Section */
 .trends-section {
-  margin-top: var(--spacing-3xl);
+  margin-top: 3rem;
 }
 
 .trends-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-2xl);
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(0, 102, 204, 0.1);
+  background: white;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+  border: 1px solid #e2e8f0;
 }
 
 .trend-chart {
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
-  gap: var(--spacing-md);
+  gap: 1rem;
   height: 300px;
-  padding: var(--spacing-lg) 0;
-  margin-bottom: var(--spacing-xl);
+  padding: 1.25rem 0;
+  margin-bottom: 1.5rem;
 }
 
 .trend-item {
@@ -600,7 +643,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: 1rem;
   max-width: 120px;
 }
 
@@ -615,13 +658,13 @@ onMounted(() => {
 .trend-bar {
   width: 100%;
   min-height: 40px;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  border-radius: 0.5rem 0.5rem 0 0;
   position: relative;
-  transition: all var(--transition-base);
+  transition: all 0.3s ease;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: var(--spacing-sm);
+  padding-top: 0.5rem;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -631,27 +674,27 @@ onMounted(() => {
 }
 
 .trend-bar.risk-high {
-  background: linear-gradient(180deg, var(--medical-red) 0%, #d32f2f 100%);
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
 }
 
 .trend-bar.risk-medium {
-  background: linear-gradient(180deg, var(--medical-orange) 0%, #f57c00 100%);
+  background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
 }
 
 .trend-bar.risk-low {
-  background: linear-gradient(180deg, var(--medical-green) 0%, #388e3c 100%);
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
 }
 
 .trend-value {
-  color: var(--medical-white);
-  font-size: 12px;
+  color: white;
+  font-size: 0.75rem;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .trend-label {
-  font-size: 12px;
-  color: var(--medical-gray-600);
+  font-size: 0.75rem;
+  color: #64748b;
   font-weight: 500;
   text-align: center;
 }
@@ -659,36 +702,58 @@ onMounted(() => {
 .trend-legend {
   display: flex;
   justify-content: center;
-  gap: var(--spacing-xl);
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--medical-gray-200);
+  gap: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e2e8f0;
   flex-wrap: wrap;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  font-size: 14px;
-  color: var(--medical-gray-700);
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #475569;
 }
 
 .legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
 }
 
 .legend-color.risk-high {
-  background: var(--medical-red);
+  background: #ef4444;
 }
 
 .legend-color.risk-medium {
-  background: var(--medical-orange);
+  background: #f97316;
 }
 
 .legend-color.risk-low {
-  background: var(--medical-green);
+  background: #22c55e;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -697,7 +762,7 @@ onMounted(() => {
   }
 
   .header-content h1 {
-    font-size: 32px;
+    font-size: 2rem;
   }
 
   .cards-grid {

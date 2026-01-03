@@ -1,9 +1,30 @@
 <template>
   <section class="analyzing">
     <div class="card">
-      <h2>Analyzing Image…</h2>
-      <div class="spinner"></div>
-      <p>Please wait while the system processes the lesion image.</p>
+      <div class="spinner-wrapper">
+        <div class="spinner"></div>
+        <svg class="check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h2>Analyzing Image</h2>
+      <p>Please wait while the system processes the lesion image using machine learning models.</p>
+      <div class="progress-steps">
+        <div class="step active">
+          <div class="step-dot"></div>
+          <span>Uploading</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-dot"></div>
+          <span>Processing</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-dot"></div>
+          <span>Analyzing</span>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -14,60 +35,113 @@
   justify-content: center;
   align-items: center;
   min-height: 400px;
-  padding: 40px 20px;
+  padding: 2.5rem 1.25rem;
 }
 
 .card {
   position: relative;
-  background-color: var(--medical-white);
-  border-radius: 16px;
-  padding: 48px 50px;
+  background: white;
+  border-radius: 1.25rem;
+  padding: 3rem 3.5rem;
   text-align: center;
-  max-width: 520px;
-  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.12);
-  border: 1px solid var(--medical-gray-200);
+  max-width: 540px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
+  border: 1px solid #e2e8f0;
+  animation: fadeIn 0.6s ease-out;
 }
 
-h2 {
-  color: var(--medical-gray-900);
-  margin-bottom: 24px;
-  font-size: 26px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-p {
-  color: var(--medical-gray-700);
-  font-size: 16px;
-  line-height: 1.6;
-  margin-top: 8px;
+.spinner-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 2rem;
 }
 
 .spinner {
-  width: 56px;
-  height: 56px;
-  border: 4px solid var(--medical-blue-light);
-  border-top-color: var(--medical-blue);
-  border-right-color: var(--medical-teal);
+  width: 80px;
+  height: 80px;
+  border: 4px solid #dbeafe;
+  border-top-color: #2563eb;
+  border-right-color: #06b6d4;
   border-radius: 50%;
-  margin: 0 auto 24px;
   animation: spin 1s linear infinite;
-  position: relative;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-.spinner::after {
-  content: "";
+.check-icon {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  background: var(--medical-teal-light);
+  width: 36px;
+  height: 36px;
+  stroke: #2563eb;
+  stroke-width: 2.5;
+  opacity: 0.3;
+}
+
+h2 {
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+p {
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 2rem;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.step-dot {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
+  background: #cbd5e1;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-dot {
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.step span {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.step.active span {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.step-line {
+  width: 60px;
+  height: 2px;
+  background: #e2e8f0;
+  margin: 0 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 @keyframes spin {
@@ -79,6 +153,26 @@ p {
   }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .card::before {
   content: "";
   position: absolute;
@@ -86,19 +180,36 @@ p {
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
-  border-radius: 16px;
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  border-radius: 1.25rem;
   z-index: -1;
   opacity: 0.1;
-  animation: pulse 2s ease-in-out infinite;
+  animation: bgPulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
+@keyframes bgPulse {
   0%, 100% {
     opacity: 0.1;
   }
   50% {
     opacity: 0.2;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 2rem 1.5rem;
+  }
+
+  .progress-steps {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .step-line {
+    width: 2px;
+    height: 30px;
+    margin: 0;
   }
 }
 </style>

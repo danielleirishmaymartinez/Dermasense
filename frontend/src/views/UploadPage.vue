@@ -10,12 +10,12 @@
         <span class="step-number">1</span>
         <span class="step-label">Image Upload</span>
       </div>
-      <div class="step-connector"></div>
+      <div class="step-connector" :class="{ completed: currentStep > 1 }"></div>
       <div class="step" :class="{ active: currentStep >= 2, completed: currentStep > 2 }">
         <span class="step-number">2</span>
         <span class="step-label">Image Analysis</span>
       </div>
-      <div class="step-connector"></div>
+      <div class="step-connector" :class="{ completed: currentStep > 2 }"></div>
       <div class="step" :class="{ active: currentStep >= 3 }">
         <span class="step-number">3</span>
         <span class="step-label">Optional Inputs</span>
@@ -35,7 +35,10 @@
               @change="onFileChange"
             />
             <div v-if="!previewUrl" class="dropzone-empty">
-              <div class="upload-icon">📸</div>
+              <svg class="upload-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
               <p>Click to upload a skin lesion image</p>
               <p class="hint">Supported formats: JPG, PNG</p>
             </div>
@@ -47,6 +50,9 @@
             @click="currentStep = 2"
           >
             Next: Image Analysis
+            <svg class="btn-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
           </button>
         </div>
 
@@ -56,7 +62,10 @@
             <p>The image will be analyzed using our machine learning model to estimate risk probability.</p>
             <div class="analysis-placeholder">
               <div class="spinner" v-if="analyzing"></div>
-              <p v-else>Ready to analyze</p>
+              <svg v-else class="ready-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p v-if="!analyzing">Ready to analyze</p>
             </div>
           </div>
           <button 
@@ -65,6 +74,9 @@
             @click="currentStep = 3"
           >
             Next: Optional Inputs
+            <svg class="btn-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
           </button>
         </div>
 
@@ -131,6 +143,9 @@
           </div>
 
           <button class="analyze" :disabled="!file" @click="submit">
+            <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
             Analyze Risk
           </button>
 
@@ -142,7 +157,7 @@
     <!-- Disclaimer Note -->
     <div class="info-note-full">
       <svg class="note-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
       </svg>
       <p>
         <strong>Disclaimer:</strong> This system is for risk assessment only and not a medical diagnosis. 
@@ -204,16 +219,13 @@ const submit = async () => {
 
     console.log("Submitting assessment request...");
     
-    // Don't set Content-Type header - let axios set it automatically for FormData
     const { data } = await api.post("/assess-risk", form, {
-      timeout: 60000, // 60 second timeout for ML inference
+      timeout: 60000,
     });
 
     console.log("Assessment response:", data);
 
-    // Check if assessment was successful
     if (!data || data.success === false) {
-      // Handle error response from backend
       localStorage.removeItem("assessmentResult");
       const errorMsg = data?.message || data?.detail || "Assessment failed. Please try again.";
       localStorage.setItem("assessmentError", errorMsg);
@@ -221,7 +233,6 @@ const submit = async () => {
       return;
     }
 
-    // Save result for ResultPage
     localStorage.setItem("assessmentResult", JSON.stringify(data));
     if (previewUrl.value) {
       localStorage.setItem("assessmentImage", previewUrl.value);
@@ -233,16 +244,9 @@ const submit = async () => {
     router.push("/results");
   } catch (err) {
     console.error("Assessment error:", err);
-    console.error("Error details:", {
-      message: err?.message,
-      code: err?.code,
-      response: err?.response?.data,
-      status: err?.response?.status,
-    });
 
     localStorage.removeItem("assessmentResult");
 
-    // Better error message handling
     let errorMessage = "Failed to analyze image. Please try again.";
     
     if (err?.code === 'ECONNABORTED') {
@@ -265,12 +269,11 @@ const submit = async () => {
 
 <style scoped>
 .upload-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-2xl);
-  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.12);
-  border: 1px solid rgba(0, 102, 204, 0.1);
+  background: white;
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
+  border: 1px solid #e2e8f0;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -278,24 +281,24 @@ const submit = async () => {
 }
 
 .upload-header {
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: 2.5rem;
   text-align: center;
 }
 
 .upload-header h2 {
-  font-size: 36px;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-sm);
+  font-size: 2.25rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .header-subtitle {
-  font-size: 16px;
-  color: var(--medical-gray-600);
+  font-size: 1rem;
+  color: #64748b;
   font-weight: 500;
 }
 
@@ -303,27 +306,26 @@ const submit = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--spacing-2xl);
-  gap: var(--spacing-sm);
-  padding: var(--spacing-lg);
-  background: var(--medical-gray-50);
-  border-radius: var(--radius-lg);
-  position: relative;
+  margin-bottom: 2.5rem;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 0.75rem;
 }
 
 .step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .step-number {
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
-  background: var(--medical-gray-200);
-  color: var(--medical-gray-600);
+  background: #cbd5e1;
+  color: #64748b;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,36 +334,43 @@ const submit = async () => {
 }
 
 .step.active .step-number {
-  background: var(--medical-blue);
-  color: var(--medical-white);
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .step.completed .step-number {
-  background: #4caf50;
-  color: var(--medical-white);
+  background: #22c55e;
+  color: white;
 }
 
 .step-label {
-  font-size: 12px;
-  color: var(--medical-gray-600);
+  font-size: 0.75rem;
+  color: #94a3b8;
   text-align: center;
 }
 
 .step.active .step-label {
-  color: var(--medical-blue);
+  color: #2563eb;
   font-weight: 600;
 }
 
 .step-connector {
   width: 60px;
   height: 2px;
-  background: var(--medical-gray-300);
-  margin: 0 8px;
+  background: #e2e8f0;
+  margin: 0 0.5rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.step-connector.completed {
+  background: #22c55e;
 }
 
 .layout {
   display: flex;
-  gap: 40px;
+  gap: 2.5rem;
   align-items: flex-start;
 }
 
@@ -371,318 +380,297 @@ const submit = async () => {
 }
 
 .step-content h3 {
-  font-size: 20px;
-  color: var(--medical-gray-900);
-  margin-bottom: 20px;
+  font-size: 1.25rem;
+  color: #1e293b;
+  margin-bottom: 1.25rem;
   font-weight: 600;
 }
 
 .step-description {
-  font-size: 14px;
-  color: var(--medical-gray-600);
-  margin-bottom: 24px;
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
   line-height: 1.6;
 }
 
 .dropzone {
-  background: linear-gradient(135deg, var(--medical-blue-light) 0%, var(--medical-teal-light) 100%);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-2xl);
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-radius: 0.75rem;
+  padding: 2.5rem;
   text-align: center;
-  border: 3px dashed var(--medical-blue);
+  border: 3px dashed #3b82f6;
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: all 0.3s ease;
   min-height: 350px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
-}
-
-.dropzone::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  opacity: 0;
-  transition: opacity var(--transition-base);
-}
-
-.dropzone:hover::before {
-  opacity: 0.05;
 }
 
 .dropzone:hover {
-  border-color: var(--medical-blue-dark);
-  background: linear-gradient(135deg, var(--medical-teal-light) 0%, var(--medical-blue-light) 100%);
+  border-color: #2563eb;
+  background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 102, 204, 0.15);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
 }
 
 .dropzone-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .upload-icon {
-  font-size: 64px;
+  width: 4rem;
+  height: 4rem;
+  stroke: #3b82f6;
+  stroke-width: 2;
+  margin-bottom: 0.5rem;
 }
 
 .dropzone p {
-  color: var(--medical-blue-dark);
-  font-size: 16px;
+  color: #1e40af;
+  font-size: 1rem;
   font-weight: 500;
   margin: 0;
 }
 
 .hint {
-  font-size: 14px;
-  color: var(--medical-gray-600);
+  font-size: 0.875rem;
+  color: #64748b;
 }
 
 .preview-image {
   max-width: 100%;
   max-height: 400px;
   object-fit: cover;
-  border-radius: 10px;
-  border: 2px solid var(--medical-white);
+  border-radius: 0.625rem;
+  border: 2px solid white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .analysis-info {
-  background: var(--medical-gray-50);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 24px;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .analysis-info p {
-  color: var(--medical-gray-700);
-  margin-bottom: 16px;
+  color: #475569;
+  margin-bottom: 1rem;
   line-height: 1.6;
 }
 
 .analysis-placeholder {
   text-align: center;
-  padding: 40px;
+  padding: 2.5rem;
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--medical-gray-200);
-  border-top-color: var(--medical-blue);
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 4px solid #e2e8f0;
+  border-top-color: #2563eb;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto;
+}
+
+.ready-icon {
+  width: 4rem;
+  height: 4rem;
+  stroke: #22c55e;
+  stroke-width: 2;
+  margin: 0 auto 0.5rem;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-.next-button {
-  margin-top: 24px;
-  padding: 14px 32px;
+.next-button,
+.analyze {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  color: var(--medical-white);
-  font-size: 16px;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  color: white;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
 }
 
-.next-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--medical-blue-dark) 0%, var(--medical-teal-dark) 100%);
+.next-button:hover:not(:disabled),
+.analyze:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
 }
 
-.next-button:disabled {
+.next-button:disabled,
+.analyze:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.btn-arrow,
+.btn-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 2.5;
 }
 
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.5rem;
 }
 
 .field label {
-  font-size: 14px;
-  color: var(--medical-gray-700);
-  margin-bottom: 8px;
+  font-size: 0.875rem;
+  color: #475569;
+  margin-bottom: 0.5rem;
   display: block;
   font-weight: 500;
 }
 
 .field select {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 8px;
-  border: 1.5px solid var(--medical-gray-300);
-  font-size: 15px;
-  background-color: var(--medical-white);
-  color: var(--medical-gray-900);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid #cbd5e1;
+  font-size: 0.9375rem;
+  background-color: white;
+  color: #1e293b;
   transition: all 0.2s ease;
-  font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .field select:focus {
   outline: none;
-  border-color: var(--medical-blue);
-  box-shadow: 0 0 0 3px var(--medical-blue-light);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .symptoms-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .symptoms-label {
-  font-size: 14px;
-  color: var(--medical-gray-700);
+  font-size: 0.875rem;
+  color: #475569;
   font-weight: 500;
 }
 
 .checkbox-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
   cursor: pointer;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1.5px solid var(--medical-gray-200);
+  padding: 0.875rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid #e2e8f0;
   transition: all 0.2s ease;
 }
 
 .checkbox-label:hover {
-  background: var(--medical-gray-50);
-  border-color: var(--medical-blue);
+  background: #f8fafc;
+  border-color: #3b82f6;
 }
 
 .checkbox-label input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
   cursor: pointer;
+  accent-color: #2563eb;
 }
 
 .checkbox-label span {
-  font-size: 15px;
-  color: var(--medical-gray-700);
-}
-
-.analyze {
-  margin-top: var(--spacing-md);
-  padding: 16px 32px;
-  border: none;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  color: var(--medical-white);
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-base);
-  box-shadow: 0 4px 20px rgba(0, 102, 204, 0.3);
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.analyze::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--medical-blue-dark) 0%, var(--medical-teal-dark) 100%);
-  opacity: 0;
-  transition: opacity var(--transition-base);
-}
-
-.analyze:hover::before {
-  opacity: 1;
-}
-
-.analyze span {
-  position: relative;
-  z-index: 1;
-}
-
-.analyze:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--medical-blue-dark) 0%, var(--medical-teal-dark) 100%);
-  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.4);
-  transform: translateY(-2px);
-}
-
-.analyze:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  font-size: 0.9375rem;
+  color: #475569;
 }
 
 .error {
-  margin-top: 16px;
-  color: var(--medical-red);
-  font-size: 14px;
-  padding: 12px 16px;
-  background-color: var(--medical-red-light);
-  border-radius: 8px;
-  border-left: 4px solid var(--medical-red);
+  margin-top: 1rem;
+  color: #dc2626;
+  font-size: 0.875rem;
+  padding: 0.875rem 1rem;
+  background-color: #fee2e2;
+  border-radius: 0.5rem;
+  border-left: 4px solid #dc2626;
   font-weight: 500;
 }
 
 .info-note-full {
-  margin-top: 24px;
-  padding: 14px 18px;
-  background-color: #FFF4E6;
-  border-left: 4px solid #FF9800;
-  border-radius: 8px;
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+  border-left: 4px solid #f97316;
+  border-radius: 0.75rem;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 0.875rem;
 }
 
 .info-note-full .note-icon {
-  width: 22px;
-  height: 22px;
+  width: 1.5rem;
+  height: 1.5rem;
   flex-shrink: 0;
-  color: #F57C00;
-  margin-top: 2px;
+  color: #ea580c;
+  margin-top: 0.125rem;
+  stroke-width: 2;
 }
 
 .info-note-full p {
   margin: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.6;
-  color: #E65100;
+  color: #9a3412;
 }
 
 .info-note-full strong {
   font-weight: 600;
-  color: #BF360C;
+  color: #7c2d12;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 900px) {
   .upload-card {
-    padding: 30px 24px;
+    padding: 2rem 1.5rem;
   }
 
   .layout {
     flex-direction: column;
-    gap: 30px;
+    gap: 2rem;
   }
 
   .steps-indicator {
