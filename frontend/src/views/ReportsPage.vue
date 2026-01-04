@@ -6,10 +6,15 @@
     </div>
 
     <div v-if="assessments.length === 0" class="empty-state">
-      <div class="empty-icon">📄</div>
+      <svg class="empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
       <h2>No assessments available</h2>
       <p>Create a risk assessment to generate reports.</p>
       <button class="primary-button" @click="$router.push('/upload')">
+        <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
         New Assessment
       </button>
     </div>
@@ -33,7 +38,10 @@
               @click="generatePDF(assessment)"
               :disabled="generating === assessment.id"
             >
-              {{ generating === assessment.id ? 'Generating...' : '📥 Download PDF' }}
+              <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+              </svg>
+              {{ generating === assessment.id ? 'Generating...' : 'Download PDF' }}
             </button>
           </div>
           <div class="report-summary">
@@ -80,10 +88,8 @@ const generatePDF = async (assessment) => {
   generating.value = assessment.id;
   
   try {
-    // Create PDF content
     const pdfContent = createPDFContent(assessment);
     
-    // Create blob and download
     const blob = new Blob([pdfContent], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -94,7 +100,6 @@ const generatePDF = async (assessment) => {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     
-    // Alternative: Open in new window for printing
     setTimeout(() => {
       const printWindow = window.open();
       printWindow.document.write(pdfContent);
@@ -111,8 +116,8 @@ const generatePDF = async (assessment) => {
 };
 
 const createPDFContent = (assessment) => {
-  const riskColor = assessment.risk_level === 'HIGH' ? '#d32f2f' : 
-                   assessment.risk_level === 'MEDIUM' ? '#f57c00' : '#388e3c';
+  const riskColor = assessment.risk_level === 'HIGH' ? '#dc2626' : 
+                   assessment.risk_level === 'MEDIUM' ? '#ea580c' : '#16a34a';
   
   return `
 <!DOCTYPE html>
@@ -126,16 +131,16 @@ const createPDFContent = (assessment) => {
       max-width: 800px;
       margin: 40px auto;
       padding: 20px;
-      color: #333;
+      color: #1e293b;
     }
     .header {
       text-align: center;
-      border-bottom: 3px solid #0066cc;
+      border-bottom: 3px solid #2563eb;
       padding-bottom: 20px;
       margin-bottom: 30px;
     }
     .header h1 {
-      color: #0066cc;
+      color: #2563eb;
       margin: 0;
     }
     .risk-badge {
@@ -151,38 +156,38 @@ const createPDFContent = (assessment) => {
     .section {
       margin: 30px 0;
       padding: 20px;
-      background: #f5f5f5;
+      background: #f8fafc;
       border-radius: 8px;
     }
     .section h2 {
-      color: #0066cc;
+      color: #2563eb;
       margin-top: 0;
     }
     .info-row {
       display: flex;
       justify-content: space-between;
       padding: 10px 0;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid #e2e8f0;
     }
     .info-row:last-child {
       border-bottom: none;
     }
     .label {
       font-weight: 600;
-      color: #666;
+      color: #64748b;
     }
     .value {
-      color: #333;
+      color: #1e293b;
     }
     .disclaimer {
-      background: #fff3cd;
-      border-left: 4px solid #ff9800;
+      background: #ffedd5;
+      border-left: 4px solid #f97316;
       padding: 15px;
       margin: 30px 0;
       border-radius: 4px;
     }
     .disclaimer strong {
-      color: #e65100;
+      color: #9a3412;
     }
     ul {
       padding-left: 20px;
@@ -231,9 +236,9 @@ const createPDFContent = (assessment) => {
       <span class="label">Support Risk (User Inputs):</span>
       <span class="value">${assessment.support_risk_percentage}</span>
     </div>
-    <div class="info-row" style="border-top: 2px solid #0066cc; margin-top: 10px; padding-top: 15px;">
+    <div class="info-row" style="border-top: 2px solid #2563eb; margin-top: 10px; padding-top: 15px;">
       <span class="label" style="font-size: 18px;">Final Risk Score:</span>
-      <span class="value" style="font-size: 18px; font-weight: 700; color: #0066cc;">${assessment.final_risk_percentage}</span>
+      <span class="value" style="font-size: 18px; font-weight: 700; color: #2563eb;">${assessment.final_risk_percentage}</span>
     </div>
   </div>
 
@@ -274,7 +279,7 @@ const createPDFContent = (assessment) => {
     Always consult a dermatologist for professional evaluation.</p>
   </div>
 
-  <div style="text-align: center; margin-top: 40px; color: #666; font-size: 12px;">
+  <div style="text-align: center; margin-top: 40px; color: #64748b; font-size: 12px;">
     <p>Generated by DermaSense Risk Assessment System</p>
     <p>Report ID: ${assessment.id}</p>
   </div>
@@ -306,15 +311,15 @@ onMounted(() => {
 }
 
 .page-header {
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
 }
 
 .page-header h1 {
-  font-size: 42px;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-sm);
+  font-size: 2.75rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -322,66 +327,78 @@ onMounted(() => {
 }
 
 .subtitle {
-  font-size: 18px;
-  color: var(--medical-gray-600);
+  font-size: 1.125rem;
+  color: #64748b;
 }
 
 .empty-state {
   text-align: center;
-  padding: 80px 20px;
-  background: var(--medical-white);
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  padding: 5rem 1.25rem;
+  background: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
 }
 
 .empty-icon {
-  font-size: 64px;
-  margin-bottom: 24px;
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1.5rem;
+  stroke: #94a3b8;
+  stroke-width: 1.5;
 }
 
 .empty-state h2 {
-  font-size: 24px;
-  color: var(--medical-gray-900);
-  margin-bottom: 12px;
+  font-size: 1.5rem;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
 }
 
 .empty-state p {
-  font-size: 16px;
-  color: var(--medical-gray-600);
-  margin-bottom: 32px;
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 2rem;
 }
 
 .primary-button {
-  padding: 14px 32px;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  color: var(--medical-white);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 0.75rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
 }
 
 .primary-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.btn-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 2.5;
 }
 
 .reports-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem;
 }
 
 .report-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
-  box-shadow: 0 4px 20px rgba(0, 102, 204, 0.1);
-  border: 1px solid rgba(0, 102, 204, 0.1);
-  transition: all var(--transition-base);
+  background: white;
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -393,9 +410,9 @@ onMounted(() => {
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
   opacity: 0;
-  transition: opacity var(--transition-base);
+  transition: opacity 0.3s ease;
 }
 
 .report-card:hover::before {
@@ -403,7 +420,7 @@ onMounted(() => {
 }
 
 .report-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
   transform: translateY(-2px);
 }
 
@@ -411,9 +428,9 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .report-info {
@@ -421,50 +438,54 @@ onMounted(() => {
 }
 
 .report-date {
-  font-size: 14px;
-  color: var(--medical-gray-600);
-  margin-bottom: 8px;
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.5rem;
 }
 
 .report-risk {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 0.375rem 0.875rem;
+  border-radius: 0.375rem;
   display: inline-block;
 }
 
 .report-risk.risk-high {
-  background: #ffebee;
-  color: var(--medical-red);
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .report-risk.risk-medium {
-  background: #fff3e0;
-  color: #f57c00;
+  background: #ffedd5;
+  color: #ea580c;
 }
 
 .report-risk.risk-low {
-  background: #e8f5e9;
-  color: #388e3c;
+  background: #dcfce7;
+  color: #16a34a;
 }
 
 .download-button {
-  padding: 10px 20px;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  color: var(--medical-white);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
 }
 
 .download-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--medical-blue-dark) 0%, var(--medical-teal-dark) 100%);
+  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .download-button:disabled {
@@ -474,25 +495,36 @@ onMounted(() => {
 
 .report-summary {
   display: flex;
-  gap: 24px;
-  padding-top: 16px;
-  border-top: 1px solid var(--medical-gray-200);
+  gap: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
 }
 
 .summary-item {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .summary-item .label {
-  font-size: 14px;
-  color: var(--medical-gray-600);
+  font-size: 0.875rem;
+  color: #64748b;
 }
 
 .summary-item .value {
-  font-size: 14px;
-  color: var(--medical-gray-900);
+  font-size: 0.875rem;
+  color: #1e293b;
   font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -503,12 +535,12 @@ onMounted(() => {
 
   .download-button {
     width: 100%;
+    justify-content: center;
   }
 
   .report-summary {
     flex-direction: column;
-    gap: 12px;
+    gap: 0.75rem;
   }
 }
 </style>
-

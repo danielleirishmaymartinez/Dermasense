@@ -6,10 +6,15 @@
     </div>
 
     <div v-if="assessments.length === 0" class="empty-state">
-      <div class="empty-icon">📋</div>
+      <svg class="empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+      </svg>
       <h2>No assessments yet</h2>
       <p>Start by creating a new risk assessment to track your skin health.</p>
       <button class="primary-button" @click="$router.push('/upload')">
+        <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
         New Assessment
       </button>
     </div>
@@ -65,7 +70,11 @@
             <div class="comparison-score">{{ previousAssessment.final_risk_percentage }}</div>
           </div>
 
-          <div class="comparison-arrow">→</div>
+          <div class="comparison-arrow">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </div>
 
           <div class="comparison-card">
             <h3>Current Assessment</h3>
@@ -78,7 +87,9 @@
         </div>
 
         <div class="trend-indicator">
-          <span class="trend-icon">{{ getTrendIcon() }}</span>
+          <svg class="trend-icon" :class="getTrendClass()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getTrendIconPath()" />
+          </svg>
           <span class="trend-text">{{ getTrendText() }}</span>
         </div>
       </div>
@@ -125,13 +136,22 @@ const selectAssessment = (assessment) => {
   selectedAssessment.value = assessment;
 };
 
-const getTrendIcon = () => {
-  if (!selectedAssessment.value || !previousAssessment.value) return "➡️";
+const getTrendClass = () => {
+  if (!selectedAssessment.value || !previousAssessment.value) return "trend-neutral";
   const current = selectedAssessment.value.final_risk_score;
   const previous = previousAssessment.value.final_risk_score;
-  if (current > previous) return "📈";
-  if (current < previous) return "📉";
-  return "➡️";
+  if (current > previous) return "trend-up";
+  if (current < previous) return "trend-down";
+  return "trend-neutral";
+};
+
+const getTrendIconPath = () => {
+  if (!selectedAssessment.value || !previousAssessment.value) return "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6";
+  const current = selectedAssessment.value.final_risk_score;
+  const previous = previousAssessment.value.final_risk_score;
+  if (current > previous) return "M13 17h8m0 0V9m0 8l-8-8-4 4-6-6";
+  if (current < previous) return "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6";
+  return "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6";
 };
 
 const getTrendText = () => {
@@ -170,15 +190,15 @@ onMounted(() => {
 }
 
 .page-header {
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
 }
 
 .page-header h1 {
-  font-size: 42px;
-  color: var(--medical-gray-900);
-  margin-bottom: var(--spacing-sm);
+  font-size: 2.75rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -186,88 +206,100 @@ onMounted(() => {
 }
 
 .subtitle {
-  font-size: 18px;
-  color: var(--medical-gray-600);
+  font-size: 1.125rem;
+  color: #64748b;
 }
 
 .empty-state {
   text-align: center;
-  padding: 80px 20px;
-  background: var(--medical-white);
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  padding: 5rem 1.25rem;
+  background: white;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
 }
 
 .empty-icon {
-  font-size: 64px;
-  margin-bottom: 24px;
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1.5rem;
+  stroke: #94a3b8;
+  stroke-width: 1.5;
 }
 
 .empty-state h2 {
-  font-size: 24px;
-  color: var(--medical-gray-900);
-  margin-bottom: 12px;
+  font-size: 1.5rem;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
 }
 
 .empty-state p {
-  font-size: 16px;
-  color: var(--medical-gray-600);
-  margin-bottom: 32px;
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 2rem;
 }
 
 .primary-button {
-  padding: 14px 32px;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  color: var(--medical-white);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 0.75rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
 }
 
 .primary-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.btn-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 2.5;
 }
 
 .timeline-section {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-2xl);
-  margin-bottom: var(--spacing-2xl);
-  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.12);
-  border: 1px solid rgba(0, 102, 204, 0.1);
+  background: white;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+  border: 1px solid #e2e8f0;
   animation: slideIn 0.6s ease-out;
 }
 
 .timeline-section h2 {
-  font-size: 24px;
-  color: var(--medical-gray-900);
-  margin-bottom: 24px;
+  font-size: 1.5rem;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
   font-weight: 700;
 }
 
 .timeline {
   position: relative;
-  padding-left: 32px;
+  padding-left: 2rem;
 }
 
 .timeline::before {
   content: "";
   position: absolute;
-  left: 11px;
+  left: 0.6875rem;
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--medical-gray-300);
+  background: #e2e8f0;
 }
 
 .timeline-item {
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -278,186 +310,230 @@ onMounted(() => {
 
 .timeline-marker {
   position: absolute;
-  left: -21px;
-  top: 8px;
-  width: 20px;
-  height: 20px;
+  left: -1.3125rem;
+  top: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
   border-radius: 50%;
-  border: 3px solid var(--medical-white);
+  border: 3px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .timeline-marker.risk-high {
-  background: var(--medical-red);
+  background: #ef4444;
 }
 
 .timeline-marker.risk-medium {
-  background: #ff9800;
+  background: #f97316;
 }
 
 .timeline-marker.risk-low {
-  background: #4caf50;
+  background: #22c55e;
 }
 
 .timeline-content {
-  background: var(--medical-gray-50);
-  border-radius: 12px;
-  padding: 20px;
-  border-left: 4px solid var(--medical-gray-300);
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  border-left: 4px solid #cbd5e1;
 }
 
 .timeline-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 .risk-badge-small {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
 .risk-badge-small.risk-high {
-  background: #ffebee;
-  color: var(--medical-red);
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .risk-badge-small.risk-medium {
-  background: #fff3e0;
-  color: #f57c00;
+  background: #ffedd5;
+  color: #ea580c;
 }
 
 .risk-badge-small.risk-low {
-  background: #e8f5e9;
-  color: #388e3c;
+  background: #dcfce7;
+  color: #16a34a;
 }
 
 .timeline-date {
-  font-size: 14px;
-  color: var(--medical-gray-600);
+  font-size: 0.875rem;
+  color: #64748b;
 }
 
 .timeline-details {
   display: flex;
-  gap: 24px;
+  gap: 1.5rem;
   flex-wrap: wrap;
 }
 
 .detail-item {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .detail-item .label {
-  font-size: 14px;
-  color: var(--medical-gray-600);
+  font-size: 0.875rem;
+  color: #64748b;
 }
 
 .detail-item .value {
-  font-size: 14px;
-  color: var(--medical-gray-900);
+  font-size: 0.875rem;
+  color: #1e293b;
   font-weight: 600;
 }
 
 .comparison-section {
-  background: var(--medical-white);
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+  background: white;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
 }
 
 .comparison-section h2 {
-  font-size: 24px;
-  color: var(--medical-gray-900);
-  margin-bottom: 24px;
+  font-size: 1.5rem;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
   font-weight: 700;
 }
 
 .comparison-grid {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-bottom: 24px;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .comparison-card {
   flex: 1;
-  background: var(--medical-gray-50);
-  border-radius: 12px;
-  padding: 24px;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
   text-align: center;
 }
 
 .comparison-card h3 {
-  font-size: 18px;
-  color: var(--medical-gray-700);
-  margin-bottom: 8px;
+  font-size: 1.125rem;
+  color: #475569;
+  margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
 .comparison-date {
-  font-size: 14px;
-  color: var(--medical-gray-600);
-  margin-bottom: 16px;
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 1rem;
 }
 
 .comparison-risk {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 8px;
-  padding: 8px 16px;
-  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
   display: inline-block;
 }
 
 .comparison-risk.risk-high {
-  background: #ffebee;
-  color: var(--medical-red);
+  background: #fee2e2;
+  color: #dc2626;
 }
 
 .comparison-risk.risk-medium {
-  background: #fff3e0;
-  color: #f57c00;
+  background: #ffedd5;
+  color: #ea580c;
 }
 
 .comparison-risk.risk-low {
-  background: #e8f5e9;
-  color: #388e3c;
+  background: #dcfce7;
+  color: #16a34a;
 }
 
 .comparison-score {
-  font-size: 24px;
-  color: var(--medical-gray-900);
+  font-size: 1.5rem;
+  color: #1e293b;
   font-weight: 700;
 }
 
 .comparison-arrow {
-  font-size: 32px;
-  color: var(--medical-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comparison-arrow svg {
+  width: 2rem;
+  height: 2rem;
+  stroke: #2563eb;
+  stroke-width: 2.5;
 }
 
 .trend-indicator {
   text-align: center;
-  padding: 16px;
-  background: var(--medical-gray-50);
-  border-radius: 8px;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .trend-icon {
-  font-size: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 2.5;
+}
+
+.trend-icon.trend-up {
+  stroke: #dc2626;
+}
+
+.trend-icon.trend-down {
+  stroke: #16a34a;
+}
+
+.trend-icon.trend-neutral {
+  stroke: #64748b;
 }
 
 .trend-text {
-  font-size: 16px;
-  color: var(--medical-gray-700);
+  font-size: 1rem;
+  color: #475569;
   font-weight: 600;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -470,4 +546,3 @@ onMounted(() => {
   }
 }
 </style>
-

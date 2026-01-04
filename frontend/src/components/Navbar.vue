@@ -3,7 +3,7 @@
     <div class="nav-inner">
       <div class="brand" @click="$router.push('/')">
         <div class="logo-container">
-          <div class="logo-icon">🔬</div>
+          <img src="/logo.png" alt="DermaSense Logo" class="logo-image" />
         </div>
         <div class="brand-text">
           <span class="brand-name">DermaSense</span>
@@ -11,119 +11,68 @@
         </div>
       </div>
       <nav class="nav-menu">
-        <template v-if="isAuthenticated">
-          <router-link to="/dashboard" class="nav-link" active-class="active">
-            <span class="nav-icon">📊</span>
-            <span class="nav-text">Dashboard</span>
-          </router-link>
-          <router-link to="/upload" class="nav-link" active-class="active">
-            <span class="nav-icon">📸</span>
-            <span class="nav-text">New Assessment</span>
-          </router-link>
-          <router-link to="/monitoring" class="nav-link" active-class="active">
-            <span class="nav-icon">📈</span>
-            <span class="nav-text">Monitoring</span>
-          </router-link>
-          <router-link to="/reports" class="nav-link" active-class="active">
-            <span class="nav-icon">📄</span>
-            <span class="nav-text">Reports</span>
-          </router-link>
-          <router-link to="/guide" class="nav-link" active-class="active">
-            <span class="nav-icon">📖</span>
-            <span class="nav-text">Guide</span>
-          </router-link>
-          <router-link to="/profile" class="nav-link" active-class="active">
-            <span class="nav-icon">👤</span>
-            <span class="nav-text">Profile</span>
-          </router-link>
-          <button @click="handleLogout" class="nav-link logout-button">
-            <span class="nav-icon">🚪</span>
-            <span class="nav-text">Logout</span>
-          </button>
-        </template>
-        <template v-else>
-          <router-link to="/guide" class="nav-link" active-class="active">
-            <span class="nav-icon">📖</span>
-            <span class="nav-text">Guide</span>
-          </router-link>
-          <router-link to="/login" class="nav-link" active-class="active">
-            <span class="nav-icon">🔑</span>
-            <span class="nav-text">Login</span>
-          </router-link>
-          <router-link to="/register" class="nav-link register-link" active-class="active">
-            <span class="nav-text">Sign Up</span>
-          </router-link>
-        </template>
+        <router-link to="/dashboard" class="nav-link" active-class="active">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">Dashboard</span>
+        </router-link>
+        <router-link to="/upload" class="nav-link" active-class="active">
+          <span class="nav-icon">📸</span>
+          <span class="nav-text">New Assessment</span>
+        </router-link>
+        <router-link to="/monitoring" class="nav-link" active-class="active">
+          <span class="nav-icon">📈</span>
+          <span class="nav-text">Monitoring</span>
+        </router-link>
+        <router-link to="/reports" class="nav-link" active-class="active">
+          <span class="nav-icon">📄</span>
+          <span class="nav-text">Reports</span>
+        </router-link>
+        <router-link to="/guide" class="nav-link" active-class="active">
+          <span class="nav-icon">📖</span>
+          <span class="nav-text">Guide</span>
+        </router-link>
       </nav>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { authService } from '@/services/auth';
-
-const router = useRouter();
-const isAuthenticated = ref(false);
-
-const checkAuth = () => {
-  isAuthenticated.value = authService.isAuthenticated();
-};
-
-const handleLogout = () => {
-  authService.clearAuth();
-  isAuthenticated.value = false;
-  router.push('/');
-};
-
-onMounted(() => {
-  checkAuth();
-  // Listen for auth changes
-  window.addEventListener('storage', checkAuth);
-});
-
-// Watch for route changes to update auth state
-router.afterEach(() => {
-  checkAuth();
-});
+// No authentication needed
 </script>
 
 <style scoped>
 .nav-wrapper {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
-  box-shadow: 0 2px 20px rgba(0, 102, 204, 0.08);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all var(--transition-base);
+  transition: all 0.3s ease;
 }
 
 .nav-wrapper:hover {
-  box-shadow: 0 4px 30px rgba(0, 102, 204, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .nav-inner {
   max-width: 1400px;
   margin: 0 auto;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-xl);
+  gap: 2rem;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: 0.75rem;
   cursor: pointer;
-  transition: transform var(--transition-base);
-  padding: var(--spacing-xs);
-  border-radius: var(--radius-md);
+  transition: transform 0.3s ease;
 }
 
 .brand:hover {
@@ -131,37 +80,40 @@ router.afterEach(() => {
 }
 
 .logo-container {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  border-radius: var(--radius-md);
+  width: 3rem;
+  height: 3rem;
+  background: white;
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-colored);
-  transition: all var(--transition-base);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  transition: all 0.3s ease;
+  padding: 0.25rem;
 }
 
 .brand:hover .logo-container {
   transform: rotate(5deg) scale(1.05);
-  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.25);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
 }
 
-.logo-icon {
-  font-size: 24px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .brand-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0.125rem;
 }
 
 .brand-name {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -170,8 +122,8 @@ router.afterEach(() => {
 }
 
 .brand-tagline {
-  font-size: 11px;
-  color: var(--medical-gray-600);
+  font-size: 0.6875rem;
+  color: #64748b;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -179,7 +131,7 @@ router.afterEach(() => {
 
 .nav-menu {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -187,14 +139,13 @@ router.afterEach(() => {
 .nav-link {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
   text-decoration: none;
-  color: var(--medical-gray-700);
-  font-size: 14px;
+  color: #475569;
+  font-size: 0.875rem;
   font-weight: 500;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-base);
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
   position: relative;
   white-space: nowrap;
 }
@@ -207,35 +158,26 @@ router.afterEach(() => {
   transform: translateX(-50%);
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
-  transition: width var(--transition-base);
+  background: linear-gradient(90deg, #2563eb 0%, #06b6d4 100%);
+  transition: width 0.3s ease;
   border-radius: 2px;
 }
 
 .nav-link:hover {
-  color: var(--medical-blue);
-  background: var(--medical-blue-lighter);
+  color: #2563eb;
+  background: #eff6ff;
   transform: translateY(-2px);
 }
 
 .nav-link.active {
-  color: var(--medical-blue);
-  background: linear-gradient(135deg, var(--medical-blue-light) 0%, var(--medical-teal-light) 100%);
+  color: #2563eb;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
   font-weight: 600;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
 }
 
 .nav-link.active::before {
   width: 80%;
-}
-
-.nav-icon {
-  font-size: 18px;
-  transition: transform var(--transition-base);
-}
-
-.nav-link:hover .nav-icon {
-  transform: scale(1.2);
 }
 
 .nav-text {
@@ -263,39 +205,30 @@ router.afterEach(() => {
 @media (max-width: 1024px) {
   .nav-inner {
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: 1rem;
   }
 
   .nav-menu {
     width: 100%;
     justify-content: center;
   }
-
-  .brand-tagline {
-    display: none;
-  }
 }
 
 @media (max-width: 768px) {
+  .brand-tagline {
+    display: none;
+  }
+
   .nav-menu {
-    gap: var(--spacing-xs);
+    gap: 0.25rem;
     overflow-x: auto;
-    padding-bottom: var(--spacing-xs);
+    padding-bottom: 0.5rem;
     -webkit-overflow-scrolling: touch;
   }
 
   .nav-link {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: 13px;
-  }
-
-  .nav-text {
-    display: none;
-  }
-
-  .nav-link {
-    min-width: 44px;
-    justify-content: center;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
   }
 }
 </style>
