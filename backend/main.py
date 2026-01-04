@@ -1,14 +1,16 @@
 # backend/main.py
 from pathlib import Path
 import io
+import base64
 import traceback
 import numpy as np
-from PIL import Image
+from PIL import Image as PILImage
 from datetime import datetime
 import uuid
 import json
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form, Depends, status
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -18,7 +20,7 @@ import joblib
 import uvicorn
 
 # Database and authentication imports
-from database import init_db, get_db, User, Assessment, Image
+from database import init_db, get_db, User, Assessment, Image as ImageModel
 from auth import get_password_hash, verify_password, create_access_token, get_current_user
 from schemas import UserCreate, UserResponse, Token, AssessmentResponse, AssessmentDetail, UserProfile
 
@@ -188,9 +190,13 @@ async def startup_event():
             pass
         print("✓ Database connection verified")
         
-        # Initialize tables
-        init_db()
-        print("✓ Database tables initialized")
+        # Initialize tables (safe guard)
+        try:
+            init_db()
+            print("✓ Database tables initialized")
+        except Exception as init_err:
+            # Tables may already exist, continue
+            print(f"⚠️ init_db notice: {init_err}")
     except Exception as e:
         print(f"⚠️ Database initialization error: {e}")
         print("⚠️ Please check your database connection and DATABASE_URL in .env file")
@@ -202,17 +208,52 @@ async def startup_event():
 # =========================
 def preprocess_image(image_bytes: bytes):
     """Preprocess image for model input."""
+    # Handle empty content
+    if not image_bytes:
+        raise ValueError("Empty image file")
+
+    # If a data URL string was accidentally sent, decode it
+    if isinstance(image_bytes, (bytes, bytearray)):
+        payload = image_bytes
+    else:
+        # Try to coerce to bytes
+        try:
+            payload = str(image_bytes).encode('utf-8')
+        except Exception:
+            raise ValueError("Invalid image payload")
+
+    # If payload looks like a data URL (starts with 'data:'), extract base64
     try:
-        img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        text_start = payload[:32].decode('utf-8', errors='ignore')
     except Exception:
-        raise HTTPException(status_code=400, detail="Invalid image file")
+        text_start = ''
+
+    if text_start.startswith('data:') or b'data:' in payload[:64]:
+        try:
+            # payload may be bytes of a data URL string
+            s = payload.decode('utf-8')
+            header, encoded = s.split(',', 1)
+            payload = base64.b64decode(encoded)
+        except Exception:
+            raise ValueError("Invalid data URL image")
+
+    # Try to open image with PIL
+    try:
+        img = PILImage.open(io.BytesIO(payload)).convert("RGB")
+    except Exception as e:
+        print(f"  ✗ PIL Image.open failed: {e}")
+        raise ValueError("Invalid image file") from e
 
     # Resize to model input size
-    img = img.resize(IMG_SIZE)
-    
+    try:
+        img = img.resize(IMG_SIZE)
+    except Exception as e:
+        print(f"  ✗ Image resize failed: {e}")
+        raise ValueError("Failed to resize image") from e
+
     # Convert to array and normalize to [0, 1] range
     arr = np.asarray(img, dtype=np.float32) / 255.0
-    
+
     # Add batch dimension
     return np.expand_dims(arr, axis=0)
 
@@ -696,22 +737,33 @@ async def assess_risk(
         contents = await file.read()
         print(f"✓ Image loaded: {len(contents)} bytes")
         
-        img_batch = preprocess_image(contents)
-        print(f"✓ Image preprocessed: shape {img_batch.shape}")
+        try:
+            img_batch = preprocess_image(contents)
+            print(f"✓ Image preprocessed: shape {img_batch.shape}")
+        except ValueError as ve:
+            # Return structured response expected by frontend instead of raising raw 400
+            print(f"⚠️ Image preprocessing failed: {ve}")
+            return JSONResponse(
+                status_code=400,
+                content={
+                    "success": False,
+                    "error": "invalid_image",
+                    "message": str(ve) or "The uploaded file is not a valid image.",
+                },
+            )
 
         # Validate image using comprehensive checks
         print("🔍 Validating image (checking if it's a skin lesion image)...")
         if not is_valid_skin_image(img_batch):
             print("⚠️ Image validation failed - image does not appear to be a skin lesion")
-            return {
-                "success": False,
-                "error": "invalid_image",
-                "message": "The uploaded image does not appear to be a skin lesion image. Please upload a clear, close-up photo of a skin lesion for assessment.",
-                "risk_level": None,
-                "image_risk": None,
-                "support_risk": None,
-                "final_risk": None,
-            }
+            return JSONResponse(
+                status_code=400,
+                content={
+                    "success": False,
+                    "error": "invalid_image",
+                    "message": "The uploaded image does not appear to be a skin lesion image. Please upload a clear, close-up photo of a skin lesion for assessment.",
+                },
+            )
         
         print("✓ Image validation passed - image appears to be a skin lesion")
 
@@ -740,6 +792,12 @@ async def assess_risk(
                 
                 # Get probabilities from Random Forest
                 probs = rf_model.predict_proba(features)[0]
+                
+                # Validate probs output (defensive check)
+                if not np.isfinite(probs).all():
+                    print(f"⚠️ Invalid probabilities from model (contains NaN/Inf)")
+                    raise ValueError("Model produced invalid predictions")
+                
                 print(f"✓ Probabilities obtained: {len(probs)} classes")
                 
                 # Log probabilities
@@ -763,15 +821,14 @@ async def assess_risk(
                 is_valid_confidence, confidence_error = validate_model_confidence(probs, max_prob, ent)
                 if not is_valid_confidence:
                     print(f"⚠️ Model confidence validation failed: {confidence_error}")
-                    return {
-                        "success": False,
-                        "error": "invalid_image",
-                        "message": confidence_error,
-                        "risk_level": None,
-                        "image_risk": None,
-                        "support_risk": None,
-                        "final_risk": None,
-                    }
+                    return JSONResponse(
+                        status_code=400,
+                        content={
+                            "success": False,
+                            "error": "invalid_image",
+                            "message": confidence_error,
+                        },
+                    )
                 
                 # Calculate image risk probability
                 image_risk_probability = calculate_image_risk_probability(probs)
@@ -828,7 +885,7 @@ async def assess_risk(
         db.flush()  # Flush to get the assessment ID
         
         # Save image to database
-        image_record = Image(
+        image_record = ImageModel(
             assessment_id=assessment.id,
             user_id=current_user.id,
             image_data=contents,
@@ -880,7 +937,7 @@ async def get_assessments(
     # Get image IDs for each assessment
     assessment_list = []
     for assessment in assessments:
-        image = db.query(Image).filter(Image.assessment_id == assessment.id).first()
+        image = db.query(ImageModel).filter(ImageModel.assessment_id == assessment.id).first()
         assessment_dict = {
             "id": str(assessment.id),
             "user_id": str(assessment.user_id),
@@ -924,7 +981,7 @@ async def get_assessment(
         raise HTTPException(status_code=404, detail="Assessment not found")
     
     # Get image ID
-    image = db.query(Image).filter(Image.assessment_id == assessment.id).first()
+    image = db.query(ImageModel).filter(ImageModel.assessment_id == assessment.id).first()
     
     return AssessmentDetail(
         id=assessment.id,
@@ -963,7 +1020,7 @@ async def get_assessment_image(
         raise HTTPException(status_code=404, detail="Assessment not found")
     
     # Get image
-    image = db.query(Image).filter(Image.assessment_id == assessment.id).first()
+    image = db.query(ImageModel).filter(ImageModel.assessment_id == assessment.id).first()
     
     if not image:
         raise HTTPException(status_code=404, detail="Image not found")
@@ -996,7 +1053,7 @@ async def delete_assessment(
         raise HTTPException(status_code=404, detail="Assessment not found")
     
     # Delete associated image
-    image = db.query(Image).filter(Image.assessment_id == assessment.id).first()
+    image = db.query(ImageModel).filter(ImageModel.assessment_id == assessment.id).first()
     if image:
         db.delete(image)
     
@@ -1042,4 +1099,4 @@ if __name__ == "__main__":
         print("⚠️ Running in placeholder mode (some models missing)")
     print(f"✓ Server starting on http://127.0.0.1:{port}")
     print("="*60 + "\n")
-    uvicorn.run("main:app", host="127.0.0.1", port=port, reload=False)
+    uvicorn.run(app, host="127.0.0.1", port=port, reload=False)
